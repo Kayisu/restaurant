@@ -1,0 +1,891 @@
+@use '../../../../../../styles/variables' as *;
+@use '../../../../../../styles/mixins' as *;
+
+.billing-management-container {
+  padding: $spacing-xl;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @include mobile {
+    padding: $spacing-lg;
+  }
+
+  // Header
+  .billing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-lg;
+    border-bottom: 2px solid $border-color;
+
+    h1 {
+      margin: 0;
+      color: $dark-color;
+      font-size: 2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      @include mobile {
+        font-size: 1.5rem;
+      }
+
+      .header-icon {
+        width: 2rem;
+        height: 2rem;
+        color: $primary-color;
+
+        @include mobile {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: $spacing-md;
+
+      @include mobile {
+        flex-direction: column;
+        gap: $spacing-sm;
+      }
+    }
+  }
+
+  // Filters
+  .billing-filters {
+    background: #f8f9fa;
+    border-radius: $border-radius-lg;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-xl;
+    border: 1px solid $border-color;
+
+    .filter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: $spacing-lg;
+
+      @include mobile {
+        flex-direction: column;
+        align-items: stretch;
+        gap: $spacing-md;
+      }
+
+      .filter-group {
+        display: flex;
+        gap: $spacing-md;
+        flex: 1;
+
+        @include mobile {
+          flex-direction: column;
+          gap: $spacing-sm;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-xs;
+          min-width: 150px;
+
+          @include mobile {
+            min-width: auto;
+          }
+
+          &.search-group {
+            min-width: 180px;
+          }
+
+          label {
+            font-weight: 600;
+            color: $dark-color;
+            font-size: 0.9rem;
+          }
+
+          .form-input,
+          .form-select {
+            @include form-input;
+            width: 100%;
+
+            &:disabled {
+              background-color: #f8f9fa;
+              color: #6c757d;
+              cursor: not-allowed;
+              opacity: 0.6;
+            }
+          }
+        }
+      }
+
+      .filter-actions {
+        display: flex;
+        gap: $spacing-sm;
+
+        @include mobile {
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  // Bills Table
+  .bills-table-container {
+    background: white;
+    border-radius: $border-radius-lg;
+    border: 1px solid $border-color;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 120px 1fr 100px 120px 120px 100px 260px;
+      background: $primary-color;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+
+      @include mobile {
+        grid-template-columns: 1fr;
+        display: none;
+      }
+
+      .header-cell {
+        padding: $spacing-md;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+
+    .table-content {
+      .loading-state {
+        text-align: center;
+        padding: $spacing-xxl;
+        color: $text-muted;
+
+        .loading-spinner {
+          font-size: 2rem;
+          margin-bottom: $spacing-md;
+        }
+      }
+
+      .bills-list {
+        .bill-row {
+          display: grid;
+          grid-template-columns: 120px 1fr 100px 120px 120px 100px 260px;
+          border-bottom: 1px solid $border-color;
+          transition: background-color 0.2s ease;
+
+          @include mobile {
+            grid-template-columns: 1fr;
+            padding: $spacing-md;
+            border-radius: $border-radius-md;
+            margin-bottom: $spacing-sm;
+            border: 1px solid $border-color;
+            background: white;
+          }
+
+          &:hover {
+            background: #f8f9fa;
+          }
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .cell {
+            padding: $spacing-md;
+            display: flex;
+            align-items: center;
+            border-right: 1px solid $border-color;
+
+            @include mobile {
+              border-right: none;
+              border-bottom: 1px solid $border-color;
+              padding: $spacing-sm $spacing-md;
+
+              &:last-child {
+                border-bottom: none;
+              }
+            }
+
+            &:last-child {
+              border-right: none;
+            }
+
+            &.bill-number {
+              font-weight: 700;
+              color: $primary-color;
+            }
+
+            &.customer {
+              flex-direction: column;
+              align-items: flex-start;
+
+              .customer-name {
+                font-weight: 600;
+                color: $dark-color;
+                margin-bottom: 2px;
+              }
+
+              .customer-phone {
+                font-size: 0.8rem;
+                color: $text-muted;
+              }
+            }
+
+            &.amount {
+              font-weight: 700;
+              color: $success-color;
+              font-size: 1.1rem;
+            }
+
+            &.status {
+              .status-badge {
+                padding: $spacing-xs $spacing-sm;
+                border-radius: $border-radius-xl;
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+
+                &.status-pending {
+                  background: rgba($warning-color, 0.1);
+                  color: $warning-color;
+                  border: 1px solid rgba($warning-color, 0.3);
+                }
+
+                &.status-paid {
+                  background: rgba($success-color, 0.1);
+                  color: $success-color;
+                  border: 1px solid rgba($success-color, 0.3);
+                }
+
+                &.status-cancelled {
+                  background: rgba($danger-color, 0.1);
+                  color: $danger-color;
+                  border: 1px solid rgba($danger-color, 0.3);
+                }
+
+                &.status-refunded {
+                  background: rgba(#3b82f6, 0.1);
+                  color: #3b82f6;
+                  border: 1px solid rgba(#3b82f6, 0.3);
+                }
+              }
+            }
+
+            &.date {
+              font-size: 0.9rem;
+              color: $text-muted;
+            }
+
+            &.actions {
+              gap: $spacing-xs;
+              justify-content: flex-end;
+
+              @include mobile {
+                justify-content: center;
+                flex-wrap: wrap;
+              }
+
+              .btn {
+                @include button-base;
+                @include button-size($spacing-xs, $spacing-sm);
+                font-size: 0.75rem;
+                min-width: 75px;
+                width: 60px;
+                justify-content: center;
+                display: flex;
+                align-items: center;
+                gap: 3px;
+
+                &.btn-sm {
+                  padding: 0.2rem 0.4rem;
+                  font-size: 0.7rem;
+                }
+
+                &.btn-primary {
+                  background: rgba(59, 130, 246, 0.1);
+                  color: #3b82f6;
+                  border: 1px solid rgba(59, 130, 246, 0.3);
+
+                  &:hover {
+                    background: rgba(59, 130, 246, 0.2);
+                    border-color: #3b82f6;
+                  }
+                }
+
+                &.btn-secondary {
+                  background: rgba(107, 114, 128, 0.1);
+                  color: #6b7280;
+                  border: 1px solid rgba(107, 114, 128, 0.3);
+
+                  &:hover {
+                    background: rgba(107, 114, 128, 0.2);
+                    border-color: #6b7280;
+                  }
+                }
+
+                &.btn-danger {
+                  background: rgba(220, 38, 38, 0.1);
+                  color: #dc2626;
+                  border: 1px solid rgba(220, 38, 38, 0.3);
+
+                  &:hover {
+                    background: rgba(220, 38, 38, 0.2);
+                    border-color: #dc2626;
+                  }
+                }
+              }
+            }
+          }
+
+          // Status-based row styling
+          &.bill-row-pending {
+            border-left: 4px solid $warning-color;
+          }
+
+          &.bill-row-paid {
+            border-left: 4px solid $success-color;
+          }
+
+          &.bill-row-cancelled {
+            border-left: 4px solid $danger-color;
+          }
+
+          &.bill-row-refunded {
+            border-left: 4px solid #3b82f6;
+          }
+        }
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: $spacing-xxl;
+        color: $text-muted;
+
+        .empty-icon {
+          font-size: 3rem;
+          margin: 0 auto $spacing-md auto;
+          opacity: 0.5;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 4rem;
+          height: 4rem;
+
+          svg {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        h3 {
+          color: $dark-color;
+          margin-bottom: $spacing-sm;
+        }
+
+        p {
+          margin-bottom: $spacing-lg;
+        }
+      }
+    }
+  }
+
+  // Modal
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: $spacing-lg;
+
+    .modal-content {
+      background: white;
+      border-radius: $border-radius-lg;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-lg;
+        border-bottom: 1px solid $border-color;
+        background: $primary-color;
+        color: white;
+        border-radius: $border-radius-lg $border-radius-lg 0 0;
+
+        h2 {
+          margin: 0;
+          font-size: 1.5rem;
+        }
+
+        .close-btn {
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.5rem;
+          cursor: pointer;
+          padding: $spacing-xs;
+          border-radius: 50%;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+          }
+        }
+      }
+
+      .modal-body {
+        padding: $spacing-lg;
+
+        .bill-details {
+          .detail-section {
+            margin-bottom: $spacing-xl;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            h3 {
+              color: $dark-color;
+              margin-bottom: $spacing-md;
+              font-size: 1.2rem;
+              border-bottom: 2px solid $border-color;
+              padding-bottom: $spacing-sm;
+            }
+
+            .detail-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: $spacing-md;
+
+              .detail-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: $spacing-sm;
+                background: #f8f9fa;
+                border-radius: $border-radius-md;
+
+                .label {
+                  font-weight: 600;
+                  color: $text-muted;
+                }
+
+                .value {
+                  font-weight: 600;
+                  color: $dark-color;
+                  word-break: break-word;
+                  max-width: 200px;
+
+                  // Special style for customer name
+                  &.customer-name {
+                    max-width: 300px;
+                    white-space: normal;
+                    line-height: 1.4;
+                    word-break: break-word;
+                    text-align: right;
+                  }
+
+                  &.status-badge {
+                    padding: $spacing-xs $spacing-sm;
+                    border-radius: $border-radius-xl;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+
+                    &.status-pending {
+                      background: rgba($warning-color, 0.1);
+                      color: $warning-color;
+                      border: 1px solid rgba($warning-color, 0.3);
+                    }
+
+                    &.status-paid {
+                      background: rgba($success-color, 0.1);
+                      color: $success-color;
+                      border: 1px solid rgba($success-color, 0.3);
+                    }
+
+                    &.status-cancelled {
+                      background: rgba($danger-color, 0.1);
+                      color: $danger-color;
+                      border: 1px solid rgba($danger-color, 0.3);
+                    }
+
+                    &.status-refunded {
+                      background: rgba(#3b82f6, 0.1);
+                      color: #3b82f6;
+                      border: 1px solid rgba(#3b82f6, 0.3);
+                    }
+                  }
+                }
+              }
+            }
+
+            .products-list {
+              .product-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: $spacing-md;
+                border: 1px solid $border-color;
+                border-radius: $border-radius-md;
+                margin-bottom: $spacing-sm;
+
+                &:last-child {
+                  margin-bottom: 0;
+                }
+
+                .product-info {
+                  .product-name {
+                    font-weight: 600;
+                    color: $dark-color;
+                    margin-bottom: $spacing-xs;
+                  }
+
+                  .product-details {
+                    display: flex;
+                    gap: $spacing-md;
+                    font-size: 0.9rem;
+                    color: $text-muted;
+
+                    .quantity {
+                      font-weight: 600;
+                    }
+                  }
+                }
+
+                .product-total {
+                  font-weight: 700;
+                  color: $success-color;
+                  font-size: 1.1rem;
+                }
+              }
+            }
+
+            .summary-grid {
+              .summary-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: $spacing-sm;
+                border-bottom: 1px solid $border-color;
+
+                &:last-child {
+                  border-bottom: none;
+                }
+
+                &.total {
+                  background: $primary-color;
+                  color: white;
+                  border-radius: $border-radius-md;
+                  margin-top: $spacing-sm;
+                  font-weight: 700;
+                  font-size: 1.1rem;
+                }
+
+                .label {
+                  font-weight: 600;
+                }
+
+                .value {
+                  font-weight: 600;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-md;
+        padding: $spacing-lg;
+        border-top: 1px solid $border-color;
+        background: #f8f9fa;
+        border-radius: 0 0 $border-radius-lg $border-radius-lg;
+
+        .modal-actions-left {
+          display: flex;
+          gap: $spacing-sm;
+        }
+
+        .modal-actions-right {
+          display: flex;
+          gap: $spacing-sm;
+        }
+
+        @include mobile {
+          flex-direction: column;
+          gap: $spacing-sm;
+
+          .modal-actions-left,
+          .modal-actions-right {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 24px 24px 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+.modal-body {
+  padding: 0 24px 20px 24px;
+
+  p {
+    margin: 0 0 16px 0;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .bill-info {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+
+    p {
+      margin: 0 0 8px 0;
+      font-size: 0.875rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      strong {
+        color: #1f2937;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .warning {
+    color: #dc2626;
+    font-weight: 500;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 16px 0 0 0;
+  }
+}
+
+.modal-footer {
+  padding: 20px 24px 24px 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 20px;
+
+  .btn-cancel {
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: #4b5563;
+    }
+  }
+
+  .btn-warning {
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+    border: 1px solid rgba(107, 114, 128, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 120px;
+    justify-content: center;
+    white-space: nowrap;
+
+    &:hover {
+      background: rgba(107, 114, 128, 0.2);
+      border-color: #6b7280;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(107, 114, 128, 0.2);
+    }
+  }
+
+  .btn-success {
+    background: #10b981;
+    color: white;
+    border: 1px solid #10b981;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 120px;
+    justify-content: center;
+    white-space: nowrap;
+
+    &:hover {
+      background: #059669;
+      border-color: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+  }
+
+  .btn-delete {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 80px;
+    width: 80px;
+    justify-content: center;
+
+    &:hover {
+      background: rgba(220, 38, 38, 0.2);
+      border-color: #dc2626;
+    }
+  }
+}
+
+/* Disabled button styles */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #9ca3af !important;
+  color: #6b7280 !important;
+  
+  &:hover {
+    background: #9ca3af !important;
+    color: #6b7280 !important;
+  }
+}
+
+/* Bill Edit Modal Styles */
+.bill-edit-modal {
+  max-width: 1200px;
+  width: 95%;
+  max-height: 95vh;
+  overflow-y: auto;
+  
+  @include mobile {
+    width: 98%;
+    max-height: 98vh;
+  }
+}
+
+// ============================================================================
+// ICON STYLES
+// ============================================================================
+
+// Button icons
+.btn-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-right: $spacing-xs;
+}
+
+// Modal icons
+.modal-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: $primary-color;
+  flex-shrink: 0;
+  margin-right: $spacing-sm;
+}
+
+// Empty state icon
+.empty-icon {
+  width: 4rem;
+  height: 4rem;
+  color: #6b7280;
+  margin-bottom: $spacing-md;
+  
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}

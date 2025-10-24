@@ -1,0 +1,453 @@
+.table-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.table-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 2rem; 
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 1rem;
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    margin-top: 0.5rem;
+
+    .back-icon {
+      width: 1.2rem;
+      height: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+      transform: translateX(-2px);
+    }
+  }
+}
+
+.table-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 2rem 0 1.5rem 0;
+
+  h1 {
+    color: #212529;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .table-capacity {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #dee2e6;
+
+    .capacity-icon {
+      width: 1.1rem;
+      height: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .capacity-text {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #495057;
+    }
+  }
+}
+
+.table-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  .tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    color: #6b7280;
+    position: relative;
+
+    &:hover {
+      color: #374151;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    &.active {
+      background: white;
+      color: #3b82f6;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .tab-icon {
+      width: 1.2rem;
+      height: 1.2rem;
+      flex-shrink: 0;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.start-order-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+
+  .start-order-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    margin-bottom: 1rem;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .start-order-text {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+    font-weight: 500;
+  }
+}
+
+.table-content {
+  min-height: 600px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #6b7280;
+
+  .loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 20px;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #dc2626;
+
+  .error-icon {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 20px;
+  }
+
+  p {
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .retry-btn {
+    padding: 0.75rem 1.5rem;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #b91c1c;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .table-detail-container {
+    padding: 1rem;
+  }
+
+  .table-detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .table-tabs {
+    flex-direction: column;
+    
+    .tab-btn {
+      text-align: left;
+    }
+  }
+
+  .table-content {
+    min-height: 400px;
+  }
+}
+
+// Reservations Tab Styles
+.reservations-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  .reservations-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f8f9fa;
+
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #374151;
+    }
+  }
+
+  .reservations-list {
+    .reservation-card {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: #f8f9fa;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .reservation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+
+        .reservation-info {
+          flex: 1;
+
+          h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+          }
+
+          p {
+            margin: 0 0 0.25rem 0;
+            color: #6b7280;
+            font-size: 0.9rem;
+
+            &.reservation-time {
+              color: #059669;
+              font-weight: 500;
+            }
+
+            &.party-size {
+              color: #7c3aed;
+              font-weight: 500;
+            }
+
+            &.customer-phone {
+              color: #dc2626;
+              font-weight: 500;
+            }
+
+            &.notes {
+              font-style: italic;
+              color: #9ca3af;
+            }
+          }
+        }
+
+        .reservation-status {
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          text-transform: uppercase;
+
+          &.upcoming {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+          }
+
+          &.overdue {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+          }
+
+          &.seated {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+          }
+
+          &.cancelled {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+          }
+
+          &.completed {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+          }
+        }
+      }
+
+      .reservation-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+
+        .btn {
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &.btn-secondary {
+            background: #6b7280;
+            color: white;
+
+            &:hover {
+              background: #4b5563;
+            }
+          }
+
+          &.btn-danger {
+            background: #ef4444;
+            color: white;
+
+            &:hover {
+              background: #dc2626;
+            }
+          }
+
+          &.btn-success {
+            background: #22c55e;
+            color: white;
+
+            &:hover {
+              background: #16a34a;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: #6b7280;
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    p {
+      margin: 0 0 1.5rem 0;
+      font-size: 1rem;
+    }
+  }
+}

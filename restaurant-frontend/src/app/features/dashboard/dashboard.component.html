@@ -1,0 +1,615 @@
+<div class="dashboard">
+  <!-- Dashboard Content -->
+    <div class="dashboard-header">
+      <h1>
+        <svg class="section-icon icon-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Restaurant Dashboard
+      </h1>
+      <p>Welcome back, {{ userName() }}!</p>
+    </div>
+  <!-- Dashboard Stats -->
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <svg class="stat-icon icon-tables" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="12" rx="2"/>
+        <path d="M3 9h18"/>
+        <path d="M3 15h18"/>
+        <path d="M9 3v18"/>
+        <path d="M15 3v18"/>
+      </svg>
+      <div class="stat-content">
+        <h3>{{ dashboardStats.total_tables || tables.length }}</h3>
+        <p>Total Tables</p>
+      </div>
+    </div>
+    
+    <div class="stat-card available">
+      <svg class="stat-icon icon-available" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+      <div class="stat-content">
+        <h3>{{ totalAvailableCount }}</h3>
+        <p>Available</p>
+      </div>
+    </div>
+    
+    <div class="stat-card occupied">
+      <svg class="stat-icon icon-occupied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6L6 18"/>
+        <path d="M6 6l12 12"/>
+      </svg>
+      <div class="stat-content">
+        <h3>{{ totalOccupiedCount }}</h3>
+        <p>Occupied</p>
+      </div>
+    </div>
+
+    <div class="stat-card reserved">
+      <svg class="stat-icon icon-reserved" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+      <div class="stat-content">
+        <h3>{{ dashboardStats.reserved_tables || 0 }}</h3>
+        <p>Reserved Today</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Summary Cards -->
+  <div class="section-summary" *ngIf="sectionSummary.length > 0">
+    <div class="section-header">
+      <div class="header-content">
+        <h2>
+          <svg class="section-icon icon-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          Section Overview
+        </h2>
+        <button class="toggle-btn" (click)="toggleSectionOverview()">
+          <svg class="toggle-icon" [class.expanded]="showSectionOverview" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6,9 12,15 18,9"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="section-content" [class.hidden]="!showSectionOverview">
+      <div class="section-cards">
+        <div class="section-card" *ngFor="let section of sectionSummary">
+          <div class="section-header">
+            <h3>Section {{ section.section_code }}</h3>
+            <span class="section-status" [class]="getSectionStatusClass(section)">
+              {{ getSectionStatusText(section) }}
+            </span>
+          </div>
+          <div class="section-stats">
+            <div class="stat">
+              <span class="stat-number">{{ section.total_tables }}</span>
+              <span class="stat-label">Total</span>
+            </div>
+            <div class="stat available">
+              <span class="stat-number">{{ section.available_tables }}</span>
+              <span class="stat-label">Available</span>
+            </div>
+            <div class="stat occupied">
+              <span class="stat-number">{{ section.occupied_tables }}</span>
+              <span class="stat-label">Occupied</span>
+            </div>
+            <div class="stat reserved">
+              <span class="stat-number">{{ section.reserved_tables }}</span>
+              <span class="stat-label">Reserved Today</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tables Overview Section -->
+  <div class="tables-overview">
+    <div class="section-header">
+      <div class="header-left">
+        <h3>
+          <svg class="section-icon icon-tables" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="12" rx="2"/>
+            <path d="M3 9h18"/>
+            <path d="M3 15h18"/>
+            <path d="M9 3v18"/>
+            <path d="M15 3v18"/>
+          </svg>
+          Tables Overview
+        </h3>
+        <button 
+          class="toggle-btn" 
+          (click)="showTablesOverview = !showTablesOverview">
+          <svg class="toggle-icon" [class.expanded]="showTablesOverview" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6,9 12,15 18,9"></polyline>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Section Selector moved to top right -->
+      <div class="section-selector" *ngIf="tableSectionKeys.length > 1 && showTablesOverview">
+        <label for="sectionSelect">Section:</label>
+        <select 
+          id="sectionSelect"
+          [(ngModel)]="currentSection" 
+          (change)="onSectionChange()"
+          class="section-dropdown">
+          <option *ngFor="let section of tableSectionKeys" [value]="section">
+            Section {{ section }}
+          </option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="tables-content" *ngIf="showTablesOverview">
+      <!-- Table Tabs -->
+      <div class="table-tabs">
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'available'"
+          (click)="setActiveTab('available')">
+          Available ({{ trulyAvailableTables.length }})
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'occupied'"
+          (click)="setActiveTab('occupied')">
+          Occupied ({{ occupiedTables.length }})
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'reserved'"
+          (click)="setActiveTab('reserved')">
+          Reserved Today ({{ reservedTables.length }})
+        </button>
+      </div>
+      
+      <!-- Tables Grid -->
+      <div class="tables-grid">
+        <div 
+          class="table-card" 
+          *ngFor="let table of getCurrentTabTables()" 
+          [class.occupied]="table.is_occupied"
+          [class.reserved]="!table.is_occupied && table.reservation_status === 'confirmed'"
+          (click)="navigateToTable(table.table_id)">
+          
+          <div class="table-header">
+            <h4>Table {{ table.table_id }}</h4>
+            <div class="table-meta">
+              <span class="capacity">
+                <svg class="action-icon icon-people" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                {{ table.capacity || 'N/A' }}
+              </span>
+              <span class="status-badge" [class]="getTableStatusClass(table)">
+                {{ getTableStatusText(table) }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="table-details">
+            <div class="detail-row">
+              <span class="label">Capacity:</span>
+              <span class="value">{{ table.capacity || 'N/A' }}</span>
+            </div>
+            <div class="detail-row" *ngIf="table.section_code">
+              <span class="label">Section:</span>
+              <span class="value">{{ table.section_code }}</span>
+            </div>
+            <div class="detail-row" *ngIf="table.is_occupied && table.occupied_duration_minutes">
+              <span class="label">Duration:</span>
+              <span class="value">{{ table.occupied_duration_minutes }} min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- No Tables Message -->
+      <div class="no-tables" *ngIf="getCurrentTabTables().length === 0">
+        <p>No {{ activeTab }} tables found in this section.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reservations Section -->
+  <div class="reservations-section">
+    <div class="section-header">
+      <div class="header-left">
+        <h3>
+          <svg class="section-icon icon-reservations" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <path d="M16 2v4"/>
+            <path d="M8 2v4"/>
+            <path d="M3 10h18"/>
+          </svg>
+          Reservations
+        </h3>
+        <button
+          class="toggle-btn"
+          (click)="showReservations = !showReservations">
+          <svg class="toggle-icon" [class.expanded]="showReservations" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6,9 12,15 18,9"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="reservations-content" [class.expanded]="showReservations">
+      <!-- Reservation Filters -->
+      <div class="reservation-filters" *ngIf="showReservations">
+        <div class="filter-row">
+          <div class="filter-group">
+            <div class="form-group">
+              <label for="dateFilter">
+                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <path d="M16 2v4"/>
+                  <path d="M8 2v4"/>
+                  <path d="M3 10h18"/>
+                </svg>
+                Date
+              </label>
+              <input
+                type="date"
+                id="dateFilter"
+                [(ngModel)]="reservationDateFilter"
+                (ngModelChange)="applyReservationFilters()"
+                (input)="applyReservationFilters()"
+                class="form-input"
+              />
+            </div>
+            <div class="form-group">
+              <label for="statusFilter">
+                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 3v18h18"/>
+                  <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                </svg>
+                Status
+              </label>
+              <select
+                id="statusFilter"
+                [(ngModel)]="reservationStatusFilter"
+                (ngModelChange)="applyReservationFilters()"
+                (change)="applyReservationFilters()"
+                class="form-select"
+              >
+                <option value="">All Status</option>
+                <option value="confirmed"> Confirmed</option>
+                <option value="completed"> Completed</option>
+                <option value="overdue"> Overdue</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="customerFilter">
+                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Customer
+              </label>
+              <input
+                type="text"
+                id="customerFilter"
+                [(ngModel)]="reservationCustomerFilter"
+                (ngModelChange)="applyReservationFilters()"
+                (input)="applyReservationFilters()"
+                placeholder="Search by customer name..."
+                class="form-input"
+              />
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-secondary clear-btn" (click)="clearReservationFilters()">
+              <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6L6 18"/>
+                <path d="M6 6l12 12"/>
+              </svg>
+              Clear Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reservations List -->
+      <div class="reservations-list">
+
+        <div class="reservation-item"
+             *ngFor="let reservation of paginatedReservations(); trackBy: trackByReservationId"
+             (click)="navigateToReservationDetail(reservation)"
+             [class]="getReservationItemClass(reservation)">
+
+          <!-- Reservation Header -->
+          <div class="reservation-header">
+            <div class="customer-avatar">
+              <span class="avatar-icon">{{ getCustomerInitial(reservation.customer_name) }}</span>
+            </div>
+            <div class="customer-info">
+              <h4 class="customer-name">{{ reservation.customer_full_name || reservation.customer_name || 'Walk-in Customer' }}</h4>
+              <div class="customer-contact">
+                <span class="phone" *ngIf="reservation.customer_full_phone || reservation.customer_phone">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  {{ reservation.customer_full_phone || reservation.customer_phone }}
+                </span>
+              </div>
+            </div>
+            <div class="reservation-status" [class]="reservation.status" *ngIf="reservation.status">
+              <span class="status-icon">{{ getStatusIcon(reservation.status) }}</span>
+              <span class="status-text">{{ getStatusText(reservation.status) }}</span>
+            </div>
+            <!-- Quick Actions (moved to same line as customer info) -->
+            <div class="reservation-actions">
+              <button class="action-btn table-btn" (click)="navigateToTable(reservation.table_id); $event.stopPropagation()">
+                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="12" rx="2"/>
+                  <path d="M3 9h18"/>
+                  <path d="M3 15h18"/>
+                  <path d="M9 3v18"/>
+                  <path d="M15 3v18"/>
+                </svg>
+                Table
+              </button>
+              <button class="action-btn edit-btn" 
+                      (click)="editReservation(reservation); $event.stopPropagation()"
+                      [disabled]="reservation.status === 'completed'">
+                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit
+              </button>
+              <button class="action-btn delete-btn" (click)="showDeleteConfirmation(reservation); $event.stopPropagation()">
+                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3,6 5,6 21,6"/>
+                  <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="17"/>
+                  <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+                Delete
+              </button>
+            </div>
+          </div>
+
+          <!-- Reservation Details -->
+          <div class="reservation-details">
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span class="label">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="12" rx="2"/>
+                    <path d="M3 9h18"/>
+                    <path d="M3 15h18"/>
+                    <path d="M9 3v18"/>
+                    <path d="M15 3v18"/>
+                  </svg>
+                  Table
+                </span>
+                <span class="value">{{ reservation.table_id }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                  Party
+                </span>
+                <span class="value">{{ reservation.party_size }} guests</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <path d="M16 2v4"/>
+                    <path d="M8 2v4"/>
+                    <path d="M3 10h18"/>
+                  </svg>
+                  Date
+                </span>
+                <span class="value">{{ reservation.formatted_date || reservation.reservation_date }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">
+                  <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                  </svg>
+                  Time
+                </span>
+                <span class="value">{{ reservation.formatted_time || reservation.reservation_time }}</span>
+              </div>
+            </div>
+            <div class="reservation-notes" *ngIf="reservation.notes">
+              <span class="notes-label">
+                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <path d="M14 2v6h6"/>
+                  <path d="M16 13H8"/>
+                  <path d="M16 17H8"/>
+                  <path d="M10 9H8"/>
+                </svg>
+                Notes:
+              </span>
+              <span class="notes-text">{{ reservation.notes }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="no-reservations" *ngIf="dashboardReservations().length === 0">
+          <div class="empty-state">
+            <div class="empty-icon icon-empty-reservations"></div>
+            <h3>No Reservations Found</h3>
+            <p>No reservations match the selected filters. Try adjusting your search criteria.</p>
+            <button class="btn btn-primary" (click)="clearReservationFilters()">
+              Clear Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="pagination-controls" *ngIf="dashboardReservations().length > 0">
+        <div class="pagination-info">
+          Showing {{ ((reservationCurrentPage() - 1) * reservationPageSize()) + 1 }} 
+          to {{ Math.min(reservationCurrentPage() * reservationPageSize(), reservationTotalCount()) }} 
+          of {{ reservationTotalCount() }} reservations
+        </div>
+        
+        <div class="pagination-buttons">
+          <button 
+            class="pagination-btn" 
+            (click)="previousReservationPage()"
+            [disabled]="reservationCurrentPage() === 1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Previous
+          </button>
+          
+          <div class="page-numbers">
+            <button 
+              *ngFor="let page of [].constructor(reservationTotalPages()); let i = index"
+              class="page-number"
+              [class.active]="reservationCurrentPage() === i + 1"
+              (click)="goToReservationPage(i + 1)">
+              {{ i + 1 }}
+            </button>
+          </div>
+          
+          <button 
+            class="pagination-btn" 
+            (click)="nextReservationPage()"
+            [disabled]="reservationCurrentPage() === reservationTotalPages()">
+            Next
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <ng-template #loadingReservations>
+        <div class="loading-reservations" *ngIf="showReservations">
+          <div class="loading-spinner">
+            <div class="loading-spinner"></div>
+            <p>Loading reservations...</p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- View Reservation Modal -->
+  <div class="modal-overlay" *ngIf="showViewModal" (click)="closeViewModal()">
+    <div class="modal-content view-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Reservation Details</h3>
+        <button class="modal-close" (click)="closeViewModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="selectedReservation">
+        <div class="reservation-card">
+          <div class="reservation-header">
+            <div class="reservation-id">#{{ selectedReservation.reservation_id }}</div>
+            <span class="status-badge" [ngClass]="'status-' + selectedReservation.status"
+                  [class.overdue-warning]="isOverdue(selectedReservation)">
+              <span class="status-dot"></span>
+              <span *ngIf="isOverdue(selectedReservation)">OVERDUE</span>
+              <span *ngIf="!isOverdue(selectedReservation)">{{ selectedReservation.status | titlecase }}</span>
+            </span>
+          </div>
+          
+          <div class="reservation-content">
+            <div class="customer-section">
+              <h4>Customer Information</h4>
+              <div class="info-row">
+                <span class="label">Name:</span>
+                <span class="value">{{ selectedReservation.customer_name || 'N/A' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Phone:</span>
+                <span class="value">{{ selectedReservation.customer_phone || 'N/A' }}</span>
+              </div>
+            </div>
+
+            <div class="reservation-section">
+              <h4>Reservation Details</h4>
+              <div class="info-row">
+                <span class="label">Table:</span>
+                <span class="table-badge">{{ selectedReservation.table_id }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Party Size:</span>
+                <span class="value">{{ selectedReservation.party_size }} people</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Date & Time:</span>
+                <span class="value">{{ selectedReservation.formatted_date }} at {{ selectedReservation.formatted_time }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Created By:</span>
+                <span class="value">{{ selectedReservation.created_by_name || 'N/A' }}</span>
+              </div>
+            </div>
+
+            <div class="notes-section" *ngIf="selectedReservation.notes">
+              <h4>Notes</h4>
+              <div class="notes-content">{{ selectedReservation.notes }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" (click)="closeViewModal()">Close</button>
+        <button 
+          class="btn btn-success" 
+          *ngIf="canSeatCustomer(selectedReservation)" 
+          (click)="seatCustomer(selectedReservation)"
+        >
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9,22 9,12 15,12 15,22"/>
+          </svg>
+          Seat Customer
+        </button>
+        <button class="btn btn-primary" 
+                (click)="editReservation(selectedReservation)"
+                [disabled]="selectedReservation?.status === 'completed'">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <app-confirmation-modal
+    [data]="deleteModalData"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+    #deleteModal
+  ></app-confirmation-modal>
+</div>

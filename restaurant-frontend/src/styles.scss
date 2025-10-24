@@ -1,0 +1,389 @@
+/* Global styles for Restaurant Management System */
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+@use 'styles/buttons' as *;
+@use 'styles/admin-components' as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: $light-color;
+  color: $dark-color;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+/* Remove default button styles */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Remove default input styles */
+input, select, textarea {
+  font-family: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Focus styles */
+*:focus {
+  outline: 2px solid $primary-color;
+  outline-offset: 2px;
+}
+
+/* Improve touch targets on mobile */
+button, input, select, textarea, a {
+  @include mobile {
+    min-height: $btn-touch-min-height;
+  }
+}
+
+/* Prevent zoom on input focus on iOS */
+@include mobile {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.flex { display: flex; }
+.flex-column { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+
+.gap-1 { gap: $spacing-xs; }
+.gap-2 { gap: $spacing-sm; }
+.gap-3 { gap: $spacing-md; }
+.gap-4 { gap: $spacing-lg; }
+.gap-5 { gap: $spacing-xl; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.mb-1 { margin-bottom: $spacing-xs; }
+.mb-2 { margin-bottom: $spacing-sm; }
+.mb-3 { margin-bottom: $spacing-md; }
+.mb-4 { margin-bottom: $spacing-lg; }
+.mb-5 { margin-bottom: $spacing-xl; }
+
+.mt-1 { margin-top: $spacing-xs; }
+.mt-2 { margin-top: $spacing-sm; }
+.mt-3 { margin-top: $spacing-md; }
+.mt-4 { margin-top: $spacing-lg; }
+.mt-5 { margin-top: $spacing-xl; }
+
+.p-1 { padding: $spacing-xs; }
+.p-2 { padding: $spacing-sm; }
+.p-3 { padding: $spacing-md; }
+.p-4 { padding: $spacing-lg; }
+.p-5 { padding: $spacing-xl; }
+
+/* Responsive container */
+.container {
+  @include container-lg;
+}
+
+/* Button utility classes */
+.btn {
+  @include button-base;
+  @include button-size($spacing-sm, $spacing-md);
+}
+
+.btn-primary {
+  @extend .btn;
+  @include button-variant($primary-color, $primary-hover);
+}
+
+.btn-secondary {
+  @extend .btn;
+  @include button-secondary;
+}
+
+.btn-success {
+  @extend .btn;
+  @include button-success;
+}
+
+.btn-warning {
+  @extend .btn;
+  @include button-warning;
+}
+
+.btn-danger {
+  @extend .btn;
+  @include button-danger;
+}
+
+.btn-small {
+  @include button-size($spacing-xs, $spacing-sm, 0.875rem);
+  min-height: 36px;
+  min-width: 36px;
+}
+
+.btn-large {
+  @include button-size($spacing-md, $spacing-lg, 1.125rem);
+  min-height: 52px;
+}
+
+/* Form utility classes */
+.form-input {
+  @include form-input;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.form-label {
+  font-weight: 600;
+  color: $dark-color;
+  font-size: 0.9rem;
+}
+
+.error-message {
+  color: $danger-color;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: $spacing-xs;
+}
+
+/* Card utility classes */
+.card {
+  @include card-base;
+  padding: $spacing-lg;
+}
+
+/* Responsive text utilities */
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-base { font-size: 1rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+
+@include mobile {
+  .text-2xl { font-size: 1.25rem; }
+  .text-3xl { font-size: 1.5rem; }
+}
+
+/* Hide elements on different screen sizes */
+@include mobile {
+  .hidden-mobile { display: none !important; }
+}
+
+@include tablet {
+  .hidden-tablet { display: none !important; }
+}
+
+@include desktop {
+  .hidden-desktop { display: none !important; }
+}
+
+/* Show elements only on specific screen sizes */
+@include mobile {
+  .show-mobile { display: block !important; }
+}
+
+@include tablet {
+  .show-tablet { display: block !important; }
+}
+
+@include desktop {
+  .show-desktop { display: block !important; }
+}
+
+/* Global Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
+  position: relative;
+  z-index: 1001;
+  transform: none !important;
+  transition: none !important;
+  isolation: isolate;
+  contain: layout style paint;
+}
+
+.modal-content:hover {
+  transform: none !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-content * {
+  transition: none !important;
+}
+
+.modal-content *:hover {
+  transform: none !important;
+}
+
+/* Disable all page hover effects when modal is open */
+body:has(.modal-overlay) *:not(.modal-overlay):not(.modal-overlay *) {
+  transition: none !important;
+}
+
+body:has(.modal-overlay) *:not(.modal-overlay):not(.modal-overlay *):hover {
+  transform: none !important;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #dc2626;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-body p {
+  margin: 0 0 1rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.item-info {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.item-info p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.item-info strong {
+  color: #374151;
+  font-weight: 600;
+}
+
+.warning {
+  color: #dc2626 !important;
+  font-weight: 600;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 1rem 0 0 !important;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.btn-cancel, .btn-delete {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn-cancel:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.btn-delete {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #b91c1c;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-delete:active {
+  transform: translateY(0);
+}

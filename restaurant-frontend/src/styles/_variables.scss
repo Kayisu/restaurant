@@ -1,0 +1,55 @@
+// Color Variables
+$primary-color: #6264c4; 
+$primary-hover: #5859c7; 
+$secondary-color: #89a7c2;
+$secondary-hover: #6798c9;
+$success-color: #28a745;
+$success-hover: #1e7e34;
+$warning-color: #ffc107;
+$warning-hover: #e0a800;
+$danger-color: #dc3545;
+$danger-hover: #c82333;
+$light-color: #f8f9fa;
+$dark-color: #212529;
+$border-color: #dee2e6;
+$text-muted: #6c757d;
+
+// Spacing Variables
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-xxl: 3rem;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 6px;
+$border-radius-lg: 8px;
+$border-radius-xl: 12px;
+
+// Box Shadows
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+
+// Breakpoints - Updated for better mobile experience
+$breakpoint-xs: 375px;  // Small phones
+$breakpoint-sm: 576px;  // Large phones
+$breakpoint-md: 768px;  // Tablets
+$breakpoint-lg: 992px;  // Small desktops
+$breakpoint-xl: 1200px; // Large desktops
+
+// Container max widths
+$container-sm: 540px;
+$container-md: 720px;
+$container-lg: 960px;
+$container-xl: 1140px;
+
+// Button sizes for better mobile touch targets
+$btn-touch-min-height: 44px; // iOS recommended minimum
+$btn-touch-min-width: 44px;

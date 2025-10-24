@@ -1,0 +1,58 @@
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+*.env
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+.angular/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Database
+
+*.db
+backup.sql
+
+# Uploads
+uploads/
+restaurant-backend/uploads/
+**/uploads/*
+!uploads/.gitkeep
+
+# Cache
+.cache/
+.temp/
+tmp/
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.orig
+admin-bypass.json

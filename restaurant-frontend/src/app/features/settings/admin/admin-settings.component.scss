@@ -1,0 +1,164 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+// Admin Settings Container
+.admin-settings-container {
+  @include responsive-padding($spacing-xl, $spacing-lg, $spacing-md);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Back Button
+.back-button-container {
+  margin-bottom: $spacing-lg;
+
+  @include mobile {
+    margin-bottom: $spacing-md;
+  }
+
+  .back-btn {
+    @include button-base;
+    @include button-size($spacing-sm, $spacing-md, 1rem);
+    background: transparent;
+    border: 2px solid $border-color;
+    color: $dark-color;
+    border-radius: $border-radius-lg;
+    transition: $transition-normal;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-weight: 500;
+    min-width: auto;
+
+    @include mobile {
+      width: 100%;
+      justify-content: center;
+      padding: $spacing-md;
+    }
+
+    &:hover {
+      background: $light-color;
+      border-color: $primary-color;
+      color: $primary-hover;
+      transform: translateX(-2px);
+      box-shadow: $shadow-sm;
+    }
+
+    .back-icon {
+      width: 1.2rem;
+      height: 1.2rem;
+      flex-shrink: 0;
+      transition: $transition-fast;
+    }
+
+    .back-text {
+      @include responsive-text(1rem, 0.9rem, 0.9rem);
+    }
+
+    &:hover .back-icon {
+      transform: translateX(-2px);
+    }
+  }
+}
+
+// Settings Topbar
+.settings-topbar {
+  @include card-base;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  border-bottom: 3px solid $primary-color;
+
+  @include mobile {
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+  }
+
+  .topbar-title {
+    text-align: center;
+    margin-bottom: $spacing-lg;
+
+    h1 {
+      @include responsive-text(2.5rem, 2rem, 1.75rem);
+      color: $dark-color;
+      font-weight: 700;
+      margin-bottom: $spacing-sm;
+    }
+
+    p {
+      @include responsive-text(1.1rem, 1rem, 0.9rem);
+      color: $text-muted;
+      margin: 0;
+    }
+  }
+
+  .settings-nav {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-md;
+    flex-wrap: nowrap;
+    max-width: 800px;
+    margin: 0 auto;
+
+    @include mobile {
+      flex-direction: column;
+      gap: $spacing-sm;
+    }
+
+    .nav-item {
+      @include button-base;
+      @include button-size($spacing-md, $spacing-lg, 1rem);
+      font-weight: 600;
+      min-width: 160px;
+      border: 2px solid transparent;
+      transition: $transition-normal;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+
+      @include mobile {
+        min-width: 100%;
+      }
+
+      .tab-icon {
+        width: 1.8rem;
+        height: 1.8rem;
+        flex-shrink: 0;
+      }
+
+      .tab-text {
+        font-size: 0.9rem;
+      }
+
+      &:hover {
+        background: rgba($primary-color, 0.1);
+        border-color: $primary-color;
+        color: $primary-hover;
+      }
+
+      &.active {
+        background: $primary-color;
+        color: white;
+        border-color: $primary-color;
+        box-shadow: $shadow-md;
+
+        &:hover {
+          background: $primary-hover;
+          border-color: $primary-hover;
+        }
+      }
+    }
+  }
+}
+
+// Settings Content
+.settings-content {
+  .settings-section {
+    @include card-base;
+    padding: $spacing-xl;
+
+    @include mobile {
+      padding: $spacing-lg;
+    }
+  }
+}

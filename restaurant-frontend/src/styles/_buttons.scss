@@ -1,0 +1,142 @@
+// Global Button Theme
+// Consistent button styles across all modules
+
+// Base button mixin for global buttons
+@mixin global-button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Button sizes for global buttons
+@mixin global-button-size($padding-y, $padding-x, $font-size) {
+  padding: $padding-y $padding-x;
+  font-size: $font-size;
+}
+
+// Action buttons (Edit, Disable, Delete)
+@mixin global-action-button {
+  @include global-button-base;
+  @include global-button-size(0.5rem, 1rem, 0.8rem);
+  min-width: 80px;
+  width: 80px;
+  justify-content: center;
+}
+
+// Edit button style
+.btn.btn-edit,
+button.btn-edit,
+.btn-edit,
+.menu-management .btn-edit,
+.menu-management button.btn-edit {
+  @include global-action-button;
+  background: rgba(107, 114, 128, 0.1) !important;
+  color: #6b7280 !important;
+  border: 1px solid rgba(107, 114, 128, 0.3) !important;
+
+  &:hover:not(:disabled) {
+    background: rgba(107, 114, 128, 0.2) !important;
+    border-color: #6b7280 !important;
+  }
+}
+
+// Disable/Warning button style
+.btn.btn-warning,
+button.btn-warning,
+.btn-warning {
+  @include global-action-button;
+  background: rgba(245, 158, 11, 0.1) !important;
+  color: #f59e0b !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+
+  &:hover:not(:disabled) {
+    background: rgba(245, 158, 11, 0.2) !important;
+    border-color: #f59e0b !important;
+  }
+}
+
+// Enable button style (for enable action)
+.btn.btn-enable,
+button.btn-enable,
+.btn-enable {
+  @include global-action-button;
+  background: rgba(34, 197, 94, 0.1) !important;
+  color: #22c55e !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+
+  &:hover:not(:disabled) {
+    background: rgba(34, 197, 94, 0.2) !important;
+    border-color: #22c55e !important;
+  }
+}
+
+// Delete/Danger button style
+.btn.btn-danger,
+button.btn-danger,
+.btn-danger {
+  @include global-action-button;
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+
+  &:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: #ef4444 !important;
+  }
+}
+
+// Primary button style
+.btn-primary {
+  @include global-button-base;
+  @include global-button-size(0.75rem, 1.5rem, 0.875rem);
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+
+  &:hover:not(:disabled) {
+    background: #2563eb;
+    border-color: #2563eb;
+  }
+}
+
+// Secondary button style
+.btn-secondary {
+  @include global-button-base;
+  @include global-button-size(0.75rem, 1.5rem, 0.875rem);
+  background: #6b7280;
+  color: white;
+  border-color: #6b7280;
+
+  &:hover:not(:disabled) {
+    background: #4b5563;
+    border-color: #4b5563;
+  }
+}
+
+// Success button style
+.btn-success {
+  @include global-button-base;
+  @include global-button-size(0.75rem, 1.5rem, 0.875rem);
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+
+  &:hover:not(:disabled) {
+    background: #059669;
+    border-color: #059669;
+  }
+}

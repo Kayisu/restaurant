@@ -1,0 +1,820 @@
+<div class="menu-management-container">
+  <!-- Header -->
+  <div class="management-header">
+    <h1>
+      <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M8 10h8"/>
+        <path d="M8 14h8"/>
+        <path d="M8 18h5"/>
+      </svg>
+      Menu Management
+    </h1>
+    <p>Manage restaurant menus and menu items</p>
+    
+    <!-- Info Notice -->
+    <div class="info-notice">
+      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 16v-4"/>
+        <path d="M12 8h.01"/>
+      </svg>
+      <div class="info-content">
+        <strong>Important:</strong> It is not recommended to update product prices or menu contents while there are active orders and bills. 
+        Changes may affect ongoing transactions and cause inconsistencies.
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="management-tabs">
+    <button 
+      class="tab-btn active">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M8 10h8"/>
+        <path d="M8 14h8"/>
+        <path d="M8 18h5"/>
+      </svg>
+      Menus
+    </button>
+  </div>
+
+  <!-- Menus Tab -->
+  <div class="tab-content">
+
+    <!-- Add Menu Button -->
+    <div class="add-button-container" *ngIf="!showMenuEditModal()">
+      <button class="btn-primary" (click)="toggleAddMenuForm()">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14"/>
+          <path d="M5 12h14"/>
+        </svg>
+        Add New Menu
+      </button>
+    </div>
+
+    <!-- Menus Table -->
+    <div class="data-table">
+      <div class="table-header menus-header">
+        <div class="col-name">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('name')">
+              Name 
+              <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path *ngIf="getSortIcon('name') === 'sort'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('name') === 'sort'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('name') === 'sort'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('name') === 'sort-asc'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('name') === 'sort-asc'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('name') === 'sort-asc'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('name') === 'sort-asc'" d="M12 6l-3 3h6l-3-3z"/>
+                <path *ngIf="getSortIcon('name') === 'sort-desc'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('name') === 'sort-desc'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('name') === 'sort-desc'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('name') === 'sort-desc'" d="M12 18l-3-3h6l-3 3z"/>
+              </svg>
+            </span>
+            <input
+              type="text"
+              placeholder="Filter by name..."
+              class="header-filter"
+              [(ngModel)]="nameFilter"
+              (input)="onNameFilterChange()"
+            />
+          </div>
+        </div>
+       
+        <div class="col-price">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('price')">
+              Price 
+              <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path *ngIf="getSortIcon('price') === 'sort'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('price') === 'sort'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('price') === 'sort'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('price') === 'sort-asc'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('price') === 'sort-asc'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('price') === 'sort-asc'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('price') === 'sort-asc'" d="M12 6l-3 3h6l-3-3z"/>
+                <path *ngIf="getSortIcon('price') === 'sort-desc'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('price') === 'sort-desc'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('price') === 'sort-desc'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('price') === 'sort-desc'" d="M12 18l-3-3h6l-3 3z"/>
+              </svg>
+            </span>
+            <input
+              type="number"
+              placeholder="Min price..."
+              class="header-filter"
+              [(ngModel)]="priceFilter"
+              (input)="onPriceFilterChange()"
+              min="0"
+              step="0.01"
+            />
+          </div>
+        </div>
+        <div class="col-status">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('status')">
+              Status 
+              <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path *ngIf="getSortIcon('status') === 'sort'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('status') === 'sort'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('status') === 'sort'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('status') === 'sort-asc'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('status') === 'sort-asc'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('status') === 'sort-asc'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('status') === 'sort-asc'" d="M12 6l-3 3h6l-3-3z"/>
+                <path *ngIf="getSortIcon('status') === 'sort-desc'" d="M3 6h18"/>
+                <path *ngIf="getSortIcon('status') === 'sort-desc'" d="M7 12h10"/>
+                <path *ngIf="getSortIcon('status') === 'sort-desc'" d="M10 18h4"/>
+                <path *ngIf="getSortIcon('status') === 'sort-desc'" d="M12 18l-3-3h6l-3 3z"/>
+              </svg>
+            </span>
+            <select
+              class="header-filter"
+              [(ngModel)]="statusFilter"
+              (change)="onStatusFilterChange()"
+            >
+              <option value="">All</option>
+              <option value="available">Available</option>
+              <option value="unavailable">Unavailable</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-actions">
+          <div class="header-content">
+            <span>Actions</span>
+            <button class="btn-secondary btn-clear-filters" (click)="clearFilters()">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loadingMenus()" class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading menus...</p>
+      </div>
+
+      <!-- Menus List -->
+      <div *ngIf="!loadingMenus()" class="table-body">
+        <ng-container *ngFor="let menu of filteredMenus()">
+          <div class="table-row menus-row">
+            <div class="col-name">
+              <div class="menu-info">
+                <h4>{{ menu.menu_name }}</h4>
+                <p *ngIf="menu.description" class="admin-description">{{ menu.description }}</p>
+              </div>
+            </div>
+            <div class="col-price">
+              <span class="price">₺{{ formatPrice(menu.price) }}</span>
+            </div>
+            <div class="col-status">
+              <span class="status-badge" [class]="menu.is_available ? 'available' : 'unavailable'">
+                {{ menu.is_available ? 'Available' : 'Unavailable' }}
+              </span>
+            </div>
+            <div class="col-actions">
+
+              <button class="btn-edit" (click)="editMenu(menu)">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit
+              </button>
+              <button 
+                class="btn-sm" 
+                [class]="menu.is_available ? 'btn-warning' : 'btn-enable'"
+                (click)="toggleMenuStatus(menu)">
+                {{ menu.is_available ? 'Disable' : 'Enable' }}
+              </button>
+              <button class="btn-sm btn-danger" (click)="deleteMenu(menu)">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="17"/>
+                  <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+                Delete
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Empty State -->
+        <div *ngIf="filteredMenus().length === 0" class="empty-state">
+          <p>No menus found</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Items Tab -->
+  <div class="tab-content" style="display: none;">
+    <div class="menu-items-header">
+      <h3>Menu Items</h3>
+      <div class="price-info">
+        <p>Category: </p>
+        <div class="price-comparison">
+          <div class="price-item">
+            <span class="price-label">Manual Price:</span>
+            <div class="price-value manual price-editable" (click)="startEditPrice()">
+              <span *ngIf="!isEditingPrice()" class="price-text">₺0.00</span>
+              <input 
+                *ngIf="isEditingPrice()" 
+                type="number" 
+                class="price-input-inline"
+                [(ngModel)]="editingPrice"
+                (blur)="savePrice()"
+                (keyup.enter)="savePrice()"
+                (keyup.escape)="cancelEditPrice()"
+                (click)="$event.stopPropagation()"
+                min="0"
+                step="5"
+                #priceInput
+              />
+            </div>
+          </div>
+          <div class="price-item">
+            <span class="price-label">Calculated Price:</span>
+            <span class="price-value calculated" [class.loading]="loadingCalculatedPrice()">
+              <span *ngIf="!loadingCalculatedPrice()">₺0.00</span>
+              <span *ngIf="loadingCalculatedPrice()">Loading...</span>
+            </span>
+          </div>
+          <div class="price-difference" *ngIf="!loadingCalculatedPrice() && calculatedPrice() > 0">
+            <span class="difference-label">Difference:</span>
+            <span class="difference-value">
+              ₺0.00
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Menu Item Form -->
+    <div class="add-form" *ngIf="showAddMenuItemForm()">
+      <div class="form-header">
+        <h3>{{ editingMenuItem() ? 'Edit Menu Item' : 'Add Product to Menu' }}</h3>
+        <button class="close-btn" (click)="toggleAddMenuItemForm()">×</button>
+      </div>
+      
+      <form (ngSubmit)="editingMenuItem() ? updateMenuItem() : addMenuItem()" class="form-grid">
+        <!-- Category Selection -->
+        <div class="form-group">
+          <label for="categorySelect">Category *</label>
+          <select
+            id="categorySelect"
+            [value]="selectedCategoryId() || ''"
+            (change)="onCategoryChange(+$event.target.value)"
+            name="categorySelect"
+            required
+            [disabled]="editingMenuItem()"
+          >
+            <option value="">Select Category</option>
+            <option *ngFor="let category of categories()" [value]="category.category_id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Subcategory Selection -->
+        <div class="form-group">
+          <label for="subcategorySelect">Subcategory *</label>
+          <select
+            id="subcategorySelect"
+            [value]="selectedSubcategoryId() || ''"
+            (change)="onSubcategoryChange(+$event.target.value)"
+            name="subcategorySelect"
+            required
+            [disabled]="editingMenuItem() || !selectedCategoryId()"
+          >
+            <option value="">Select Subcategory</option>
+            <option *ngFor="let subcategory of availableSubcategories()" [value]="subcategory.subcategory_id">
+              {{ subcategory.name }}
+            </option>
+          </select>
+        </div>
+
+
+        <div class="form-group">
+          <label for="itemQuantity">Quantity *</label>
+          <input
+            type="number"
+            id="itemQuantity"
+            [(ngModel)]="newMenuItem.quantity"
+            name="itemQuantity"
+            required
+            min="1"
+            placeholder="1"
+          />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="loading()">
+            {{ editingMenuItem() ? 'Update Item' : 'Add to Menu' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="toggleAddMenuItemForm()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Add Menu Item Button -->
+    <div class="add-button-container" *ngIf="!showAddMenuItemForm()">
+      <button class="btn-primary" (click)="toggleAddMenuItemForm()">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14"/>
+          <path d="M5 12h14"/>
+        </svg>
+        Add Product to Menu
+      </button>
+    </div>
+
+    <!-- Menu Items List -->
+    <div class="menu-items-list">
+      <div *ngIf="loadingMenuItems()" class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading menu items...</p>
+      </div>
+
+      <div *ngIf="!loadingMenuItems()" class="items-grid">
+        <div *ngFor="let item of menuItems()" class="menu-item-card">
+          <div class="item-info">
+            <h4>{{ item.product_name }}</h4>
+            <p *ngIf="item.product_description" class="item-description">{{ item.product_description }}</p>
+            <div class="item-meta">
+              <span class="category">{{ item.category_name }} › {{ item.subcategory_name }}</span>
+              <span class="price">₺{{ formatPrice(item.product_price) }}</span>
+            </div>
+          </div>
+          <div class="item-quantity">
+            <span class="quantity-label">Quantity:</span>
+            <span class="quantity-value">{{ item.quantity }}</span>
+          </div>
+          <div class="item-actions">
+            <button class="btn-sm btn-danger" (click)="removeMenuItem(item)">
+              Remove
+            </button>
+            <div class="quantity-controls">
+              <button 
+                class="btn-sm btn-decrease" 
+                (click)="decreaseQuantity(item)"
+                [disabled]="item.quantity <= 1"
+                [class.disabled]="item.quantity <= 1"
+              >
+                -1
+              </button>
+              <button class="btn-sm btn-increase" (click)="increaseQuantity(item)">
+                +1
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="menuItems().length === 0" class="empty-state">
+          <p>No items in this menu</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Menu Selected -->
+    <div class="no-selection">
+      <p>Please select a menu to view its items</p>
+    </div>
+  </div>
+
+
+
+</div>
+
+<!-- Menu Edit Modal -->
+<div class="modal-overlay" *ngIf="showMenuEditModal()" (click)="closeMenuEditModal()">
+  <div class="modal-content extra-large-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>
+        <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M8 10h8"/>
+          <path d="M8 14h8"/>
+          <path d="M8 18h5"/>
+        </svg>
+        {{ editingMenu() ? 'Edit Menu' : 'Add New Menu' }}
+      </h2>
+      <button class="close-btn" (click)="closeMenuEditModal()">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <!-- Menu Details Section -->
+      <div class="menu-details-section">
+        <h3>Menu Details</h3>
+        <form (ngSubmit)="editingMenu() ? updateMenu() : createMenu()" #menuForm="ngForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="menuName">Menu Name *</label>
+              <input
+                type="text"
+                id="menuName"
+                [(ngModel)]="newMenu.menu_name"
+                name="menuName"
+                required
+                placeholder="Enter menu name"
+                class="form-input"
+              />
+            </div>
+            
+            <div class="form-group">
+              <label class="switch-label">
+                <span class="switch-text">Available</span>
+                <label class="switch">
+                  <input 
+                    type="checkbox" 
+                    [(ngModel)]="newMenu.is_available"
+                    name="menuAvailable"
+                  />
+                  <span class="slider"></span>
+                </label>
+              </label>
+            </div>
+          </div>
+
+          <!-- Price Calculation Section -->
+          <div class="price-calculation-section" *ngIf="menuItems().length > 0">
+            <h4>Price Calculation</h4>
+            <div class="price-comparison">
+              <div class="price-item">
+                <span class="price-label">Calculated Price:</span>
+                <span class="price-value calculated" [class.loading]="loadingCalculatedPrice()">
+                  <span *ngIf="!loadingCalculatedPrice()">₺{{ formatPrice(calculatedPrice()) }}</span>
+                  <span *ngIf="loadingCalculatedPrice()">Loading...</span>
+                </span>
+              </div>
+              <div class="price-item">
+                <span class="price-label">Manual Price:</span>
+                <div class="price-value manual price-editable" (click)="startEditPrice()">
+                  <span *ngIf="!isEditingPrice()" class="price-text">₺{{ formatPrice(newMenu.price || 0) }}</span>
+                  <input 
+                    *ngIf="isEditingPrice()" 
+                    type="number" 
+                    class="price-input-inline"
+                    [(ngModel)]="editingPrice"
+                    (blur)="savePrice()"
+                    (keyup.enter)="savePrice()"
+                    (keyup.escape)="cancelEditPrice()"
+                    (click)="$event.stopPropagation()"
+                    min="0"
+                    step="0.01"
+                    #priceInput
+                  />
+                </div>
+              </div>
+              <div class="price-difference" *ngIf="!loadingCalculatedPrice() && calculatedPrice() > 0">
+                <span class="difference-label">Difference:</span>
+                <span class="difference-value" [class.customer-profit]="(newMenu.price || 0) - calculatedPrice() < 0" [class.customer-loss]="(newMenu.price || 0) - calculatedPrice() > 0">
+                  ₺{{ formatPrice((newMenu.price || 0) - calculatedPrice()) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="menuPrice">Price (₺) *</label>
+            <input
+              type="number"
+              id="menuPrice"
+              [(ngModel)]="newMenu.price"
+              name="menuPrice"
+              required
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              class="form-input"
+            />
+            <small class="form-hint" *ngIf="menuItems().length > 0">
+              Calculated price: ₺{{ formatPrice(calculatedPrice()) }} | 
+              <button type="button" class="btn-link" (click)="setCalculatedPrice()">Use calculated price</button>
+            </small>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="menuImage">Menu Image</label>
+            <app-image-upload
+              [config]="menuImageConfig"
+              [currentImageUrl]="newMenu.image_url"
+              [variant]="'card'"
+              (imageUploaded)="onMenuImageUploaded($event)"
+              (imageRemoved)="onMenuImageRemoved()"
+            ></app-image-upload>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="menuDescription">Description</label>
+            <textarea
+              id="menuDescription"
+              [(ngModel)]="newMenu.description"
+              name="menuDescription"
+              rows="3"
+              placeholder="Enter menu description (optional)"
+              class="form-textarea"
+            ></textarea>
+          </div>
+        </form>
+      </div>
+
+      <!-- Menu Items Section (for both creating and editing) -->
+      <div class="menu-items-section">
+        <h3>Menu Items</h3>
+        
+        <!-- Add Product Form -->
+        <div class="add-product-form" *ngIf="showAddMenuItemForm()">
+          <form (ngSubmit)="addMenuItem()" class="form-grid">
+            <!-- Category Selection -->
+            <div class="form-group">
+              <label for="categorySelect">Category *</label>
+              <select
+                id="categorySelect"
+                [value]="selectedCategoryId() || ''"
+                (change)="onCategoryChange(+$event.target.value)"
+                name="categorySelect"
+                required
+              >
+                <option value="">Select Category</option>
+                <option *ngFor="let category of categories()" [value]="category.category_id">
+                  {{ category.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Subcategory Selection -->
+            <div class="form-group">
+              <label for="subcategorySelect">Subcategory *</label>
+              <select
+                id="subcategorySelect"
+                [value]="selectedSubcategoryId() || ''"
+                (change)="onSubcategoryChange(+$event.target.value)"
+                name="subcategorySelect"
+                required
+                [disabled]="!selectedCategoryId()"
+              >
+                <option value="">Select Subcategory</option>
+                <option *ngFor="let subcategory of availableSubcategories()" [value]="subcategory.subcategory_id">
+                  {{ subcategory.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Product Multi-Select Dropdown -->
+            <div class="form-group product-multiselect-group">
+              <label for="productSelect">Products *</label>
+              <div class="multiselect-container">
+                <div class="multiselect-input" (click)="toggleProductDropdown()">
+                  <div class="selected-products">
+                    <span *ngIf="selectedProducts().length === 0" class="placeholder">Select products...</span>
+                    <div *ngFor="let product of selectedProducts()" class="selected-product-tag">
+                      <span>{{ product.name }}</span>
+                      <button type="button" class="remove-tag" (click)="removeProduct(product)">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <svg class="dropdown-arrow" [class.rotated]="showProductDropdown()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6,9 12,15 18,9"/>
+                  </svg>
+                </div>
+                
+                <!-- Product Dropdown -->
+                <div class="product-dropdown" *ngIf="showProductDropdown()">
+                  <div class="dropdown-list">
+                    <div *ngFor="let product of availableProducts()" 
+                         class="product-option"
+                         [class.selected]="isProductSelected(product)"
+                         (click)="toggleProductSelection(product)">
+                      <div class="product-info">
+                        <span class="product-name">{{ product.name }}</span>
+                        <span class="product-price">₺{{ formatPrice(product.price) }}</span>
+                      </div>
+                      <div class="selection-indicator" *ngIf="isProductSelected(product)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="20,6 9,17 4,12"/>
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    <!-- No Products Available -->
+                    <div class="no-results" *ngIf="availableProducts().length === 0">
+                      <div class="no-products-message">
+                        <svg class="no-products-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                          <line x1="3" y1="6" x2="21" y2="6"/>
+                          <path d="M8 10h8"/>
+                          <path d="M8 14h8"/>
+                          <path d="M8 18h5"/>
+                        </svg>
+                        <p>No products available</p>
+                        <small>Please select a subcategory first</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="itemQuantity">Quantity *</label>
+              <input
+                type="number"
+                id="itemQuantity"
+                [(ngModel)]="newMenuItem.quantity"
+                name="itemQuantity"
+                required
+                min="1"
+                placeholder="1"
+              />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" [disabled]="loading()">
+                Add to Menu
+              </button>
+              <button type="button" class="btn-secondary" (click)="toggleAddMenuItemForm()">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Add Product Button -->
+        <div class="add-button-container" *ngIf="!showAddMenuItemForm()">
+          <button class="btn-primary" (click)="toggleAddMenuItemForm()">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14"/>
+              <path d="M5 12h14"/>
+            </svg>
+            Add Product to Menu
+          </button>
+        </div>
+
+        <!-- Menu Items List -->
+        <div class="menu-items-list">
+          <div *ngIf="loadingMenuItems()" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading menu items...</p>
+          </div>
+
+          <div *ngIf="!loadingMenuItems() && menuItems().length > 0" class="items-list">
+            <div *ngFor="let item of menuItems()" class="menu-item-row">
+              <div class="item-main-info">
+                <div class="item-name-section">
+                  <h4 class="item-name">{{ item.product_name }}</h4>
+                  <p *ngIf="item.product_description" class="item-description">{{ item.product_description }}</p>
+                  <div class="item-category">{{ item.category_name }} › {{ item.subcategory_name }}</div>
+                </div>
+                <div class="item-price-section">
+                  <span class="item-price">₺{{ formatPrice(item.product_price) }}</span>
+                </div>
+              </div>
+              <div class="item-quantity-section">
+                <div class="quantity-controls">
+                  <button 
+                    type="button" 
+                    class="quantity-btn decrease" 
+                    (click)="updateMenuItemQuantity(item, item.quantity - 1)"
+                    [disabled]="item.quantity <= 1"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                  </button>
+                  <span class="quantity-value">{{ item.quantity }}</span>
+                  <button 
+                    type="button" 
+                    class="quantity-btn increase" 
+                    (click)="updateMenuItemQuantity(item, item.quantity + 1)"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                  </button>
+                </div>
+                <button 
+                  type="button" 
+                  class="remove-item-btn" 
+                  (click)="removeMenuItem(item)"
+                  title="Remove from menu"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18"/>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!loadingMenuItems() && menuItems().length === 0" class="empty-state">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M8 10h8"/>
+                <path d="M8 14h8"/>
+                <path d="M8 18h5"/>
+              </svg>
+            </div>
+            <h4>No items in this menu</h4>
+            <p>Add products to create a complete menu</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeMenuEditModal()">
+        Cancel
+      </button>
+      <button 
+        class="btn-primary"
+        (click)="editingMenu() ? updateMenu() : createMenu()"
+        [disabled]="!menuForm.valid || loading()"
+      >
+        {{ editingMenu() ? 'Update Menu' : 'Create Menu' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal - Outside component for proper positioning -->
+<div class="modal-overlay" *ngIf="showDeleteConfirmation()" (click)="hideDeleteConfirmationDialog()">
+  <div class="modal-content small-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>
+        <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"/>
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+        Delete {{ itemToDelete()?.type === 'menu' ? 'Menu' : 'Menu Item' }}
+      </h3>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete this {{ itemToDelete()?.type === 'menu' ? 'menu' : 'menu item' }}?</p>
+      <div class="item-info" *ngIf="itemToDelete()?.item">
+        <p *ngIf="itemToDelete()?.type === 'menu'">
+          <strong>Menu:</strong> {{ itemToDelete()?.item?.menu_name }}
+        </p>
+        <p *ngIf="itemToDelete()?.type === 'menu-item'">
+          <strong>Product:</strong> {{ itemToDelete()?.item?.product_name }}
+        </p>
+        <p *ngIf="itemToDelete()?.type === 'menu'">
+          <strong>Price:</strong> ₺{{ formatPrice(itemToDelete()?.item?.price) }}
+        </p>
+      </div>
+      <p class="warning">
+        <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        This action cannot be undone!
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="hideDeleteConfirmationDialog()" [disabled]="loading()">Cancel</button>
+      <button class="btn-delete" (click)="confirmDelete()" [disabled]="loading()">
+        {{ loading() ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>

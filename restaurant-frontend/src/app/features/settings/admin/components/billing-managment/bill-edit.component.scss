@@ -1,0 +1,1598 @@
+@use "../../../../../../styles/variables" as *;
+@use "../../../../../../styles/mixins" as *;
+
+.bill-edit-container {
+  padding: $spacing-md;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: auto;
+  background: white;
+  border-radius: $border-radius-lg;
+
+  @include mobile {
+    padding: $spacing-md;
+  }
+
+  // Bill Header
+  .bill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+    padding: $spacing-lg;
+    background: white;
+    border-radius: 8px;
+    color: #1f2937;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+
+    .bill-info {
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 $spacing-xs 0;
+        color: #1f2937;
+      }
+
+      .bill-meta {
+        display: flex;
+        gap: $spacing-md;
+        align-items: center;
+
+        .bill-date {
+          font-size: 0.85rem;
+          color: #6b7280;
+        }
+
+        .bill-status {
+          padding: 2px $spacing-xs;
+          border-radius: 4px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+
+          &.status-paid {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+          }
+
+          &.status-pending {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fed7aa;
+          }
+
+          &.status-cancelled {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+          }
+        }
+      }
+    }
+
+    .header-actions {
+      .btn-secondary {
+        background: #f9fafb;
+        color: #374151;
+        border: 1px solid #d1d5db;
+
+        &:hover {
+          background: #f3f4f6;
+          border-color: #9ca3af;
+        }
+      }
+    }
+
+    @include mobile {
+      flex-direction: column;
+      gap: $spacing-lg;
+      align-items: stretch;
+    }
+  }
+
+  // Header (old)
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-xl;
+    padding: $spacing-lg;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    @include mobile {
+      flex-direction: column;
+      gap: $spacing-md;
+      align-items: stretch;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .btn-back {
+        @include button-base;
+        background: $secondary-color;
+        color: white;
+        border: 1px solid $secondary-color;
+        padding: $spacing-sm $spacing-md;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: darken($secondary-color, 10%);
+          border-color: darken($secondary-color, 10%);
+        }
+      }
+
+      h1 {
+        margin: 0;
+        color: $dark-color;
+        font-size: 1.8rem;
+        font-weight: 700;
+
+        @include mobile {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .header-right {
+      .btn-danger {
+        @include button-base;
+        background: $danger-color;
+        color: white;
+        border: 1px solid $danger-color;
+        padding: $spacing-xs $spacing-sm;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: darken($danger-color, 10%);
+          border-color: darken($danger-color, 10%);
+        }
+      }
+    }
+  }
+
+  // Loading State
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xxl;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid $primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: $spacing-md;
+    }
+
+    p {
+      color: #6c757d;
+      font-size: 1.1rem;
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  // Error State
+  .error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xxl;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+
+    .error-icon {
+      font-size: 3rem;
+      margin-bottom: $spacing-md;
+    }
+
+    h3 {
+      color: $danger-color;
+      margin-bottom: $spacing-sm;
+    }
+
+    p {
+      color: #6c757d;
+      margin-bottom: $spacing-lg;
+    }
+  }
+
+  // Bill Details Card
+  .bill-details-card {
+    background-color: white;
+    padding: $spacing-xl;
+    border-radius: 12px;
+    box-shadow: $shadow-sm;
+    margin-bottom: $spacing-xl;
+    @include mobile {
+      padding: $spacing-md;
+      border-radius: 0;
+    }
+  }
+
+  // Bill Edit Form
+  .bill-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+
+    // Sections
+    .products-section,
+    .totals-section {
+      background: white;
+      border-radius: 8px;
+      padding: $spacing-lg;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid #f3f4f6;
+
+      h2 {
+        margin: 0 0 $spacing-lg 0;
+        color: $dark-color;
+        font-size: 1.5rem;
+        font-weight: 700;
+        border-bottom: 2px solid $border-color;
+        padding-bottom: $spacing-sm;
+      }
+    }
+
+  // Bill Info - Compact (moved outside bill-edit-form)
+  .bill-info-section {
+    background: white;
+    padding: $spacing-lg;
+    border-radius: 12px;
+    box-shadow: $shadow-sm;
+    margin-bottom: $spacing-lg;
+
+    h3 {
+      margin: 0 0 $spacing-md 0;
+      color: $dark-color;
+      font-size: 1.3rem;
+    }
+
+    .bill-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $spacing-sm;
+
+      @include mobile {
+        grid-template-columns: 1fr;
+        gap: $spacing-xs;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+        padding: $spacing-xs 0;
+
+        .label {
+          font-weight: 600;
+          color: $dark-color;
+          font-size: 0.9rem;
+          min-width: 80px;
+        }
+
+        .value {
+          color: #6c757d;
+          font-size: 0.9rem;
+          
+          &:empty::after,
+          &[data-empty="true"] {
+            content: 'N/A';
+            color: #adb5bd;
+            font-style: italic;
+          }
+        }
+
+        .form-select.compact {
+          @include form-input;
+          padding: $spacing-xs $spacing-sm;
+          font-size: 0.9rem;
+          min-width: 120px;
+        }
+      }
+    }
+  }
+
+    // Section Header
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $spacing-md;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: $spacing-md;
+
+      .add-buttons {
+        display: flex !important;
+        gap: 20px !important;
+        
+        .button-wrapper {
+          margin-right: 20px !important;
+          
+          &:last-child {
+            margin-right: 0 !important;
+          }
+        }
+      }
+    }
+
+    // Add Product Form
+    .add-product-form {
+      margin-bottom: $spacing-lg;
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+
+        h3 {
+          margin: 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #1f2937;
+        }
+
+        .product-count {
+          background: #f3f4f6;
+          color: #6b7280;
+          padding: $spacing-xs $spacing-sm;
+          border-radius: 12px;
+          font-size: 0.8rem;
+          font-weight: 500;
+        }
+      }
+    }
+
+    // Products Section
+    .products-section {
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-lg;
+
+        @include mobile {
+          flex-direction: column;
+          gap: $spacing-md;
+          align-items: stretch;
+        }
+      }
+
+      // Add Product Form
+      .add-product-form {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: $spacing-lg;
+        margin-bottom: $spacing-lg;
+        border: 1px solid $border-color;
+
+        h3 {
+          margin: 0 0 $spacing-md 0;
+          color: $dark-color;
+          font-size: 1.2rem;
+        }
+
+        // Product Filters
+        .product-filters {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr;
+          gap: $spacing-md;
+          margin-bottom: $spacing-lg;
+          padding: $spacing-md;
+          background: white;
+          border-radius: 8px;
+          border: 1px solid #e9ecef;
+
+          @include mobile {
+            grid-template-columns: 1fr;
+          }
+
+          .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: $spacing-xs;
+
+            label {
+              font-weight: 600;
+              color: $dark-color;
+              font-size: 0.9rem;
+            }
+
+            .form-input,
+            .form-select {
+              @include form-input;
+              width: 100%;
+            }
+          }
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: $spacing-md;
+          margin-bottom: $spacing-md;
+
+          @include mobile {
+            grid-template-columns: 1fr;
+          }
+
+          .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: $spacing-xs;
+
+            label {
+              font-weight: 600;
+              color: $dark-color;
+              font-size: 0.9rem;
+            }
+
+            .form-input,
+            .form-select {
+              @include form-input;
+              width: 100%;
+            }
+          }
+        }
+
+        .form-actions {
+          display: flex;
+          gap: $spacing-md;
+
+          @include mobile {
+            flex-direction: column;
+          }
+        }
+      }
+
+      // Products List
+      .products-list {
+        .empty-state {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: $spacing-xxl;
+          text-align: center;
+
+          .empty-icon {
+            font-size: 3rem;
+            margin-bottom: $spacing-md;
+          }
+
+          h3 {
+            color: #6c757d;
+            margin-bottom: $spacing-sm;
+          }
+
+          p {
+            color: $text-muted;
+          }
+        }
+
+        .product-item {
+          display: grid;
+          grid-template-columns: 1fr auto auto auto;
+          gap: $spacing-lg;
+          align-items: center;
+          padding: $spacing-lg;
+          border: 1px solid $border-color;
+          border-radius: 8px;
+          margin-bottom: $spacing-md;
+          background: white;
+          transition: all 0.2s ease;
+
+          &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          }
+
+          @include mobile {
+            grid-template-columns: 1fr;
+            gap: $spacing-md;
+          }
+
+          .product-info {
+            .product-name {
+              font-weight: 600;
+              color: $dark-color;
+              margin-bottom: $spacing-xs;
+            }
+
+            .product-description {
+              color: $text-muted;
+              font-size: 0.9rem;
+            }
+          }
+
+          .product-quantity {
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+
+            .btn-quantity {
+              @include button-base;
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              background: $primary-color;
+              color: white;
+              border: 1px solid $primary-color;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              transition: all 0.2s ease;
+
+              &:hover {
+                background: darken($primary-color, 10%);
+                border-color: darken($primary-color, 10%);
+              }
+            }
+
+            .quantity-value {
+              font-weight: 600;
+              color: #000;
+              min-width: 30px;
+              text-align: center;
+            }
+          }
+
+          .product-price {
+            text-align: right;
+
+            .unit-price {
+              color: $text-muted;
+              font-size: 0.9rem;
+              margin-bottom: $spacing-xs;
+            }
+
+            .total-price {
+              font-weight: 600;
+              color: $dark-color;
+              font-size: 1.1rem;
+            }
+          }
+
+          .product-actions {
+            display: flex;
+            gap: $spacing-sm;
+
+            .btn-edit,
+            .btn-delete {
+              @include button-base;
+              width: 36px;
+              height: 36px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 0.9rem;
+              transition: all 0.2s ease;
+            }
+
+            .btn-edit {
+              background: $warning-color;
+              color: white;
+              border: 1px solid $warning-color;
+
+              &:hover {
+                background: darken($warning-color, 10%);
+                border-color: darken($warning-color, 10%);
+              }
+            }
+
+            .btn-delete {
+              background: $danger-color;
+              color: white;
+              border: 1px solid $danger-color;
+
+              &:hover {
+                background: darken($danger-color, 10%);
+                border-color: darken($danger-color, 10%);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Totals Section
+    .totals-section {
+      .totals-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: $spacing-lg;
+
+        @include mobile {
+          grid-template-columns: 1fr;
+        }
+
+        .total-item {
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-xs;
+
+          label {
+            font-weight: 600;
+            color: $dark-color;
+            font-size: 0.9rem;
+          }
+
+          .form-input {
+            @include form-input;
+            width: 100%;
+          }
+
+          span {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $dark-color;
+            padding: $spacing-sm;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+          }
+
+          &.total-final {
+            span {
+              background: $primary-color;
+              color: white;
+              font-size: 1.3rem;
+              font-weight: 700;
+            }
+          }
+        }
+      }
+    }
+
+    // Actions Section
+    .actions-section {
+      display: flex;
+      gap: $spacing-md;
+      justify-content: center;
+      padding: $spacing-xl;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      @include mobile {
+        flex-direction: column;
+      }
+
+      .btn-success,
+      .btn-secondary {
+        @include button-base;
+        padding: $spacing-md $spacing-xl;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+      }
+
+      .btn-success {
+        background: $success-color;
+        color: white;
+        border: 1px solid $success-color;
+
+        &:hover:not(:disabled) {
+          background: darken($success-color, 10%);
+          border-color: darken($success-color, 10%);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+
+      .btn-secondary {
+        background: $secondary-color;
+        color: white;
+        border: 1px solid $secondary-color;
+
+        &:hover {
+          background: darken($secondary-color, 10%);
+          border-color: darken($secondary-color, 10%);
+        }
+      }
+    }
+  }
+
+  // Warning Message
+  .warning-message {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+    padding: $spacing-sm $spacing-md;
+    border-radius: 8px;
+    margin-bottom: $spacing-md;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+
+    @include mobile {
+      font-size: 0.8rem;
+      padding: $spacing-xs $spacing-sm;
+    }
+  }
+
+  // Section Header
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+
+    @include mobile {
+      flex-direction: column;
+      gap: $spacing-sm;
+      align-items: stretch;
+    }
+
+    h3 {
+      margin: 0;
+      color: $dark-color;
+      font-size: 1.3rem;
+    }
+  }
+
+  // Add Product Form - Improved
+  .add-product-form {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+    border: 1px solid $border-color;
+
+    h4 {
+      margin: 0 0 $spacing-md 0;
+      color: $dark-color;
+      font-size: 1.1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+
+      &.full-width {
+        margin-bottom: $spacing-md;
+      }
+
+      label {
+        font-weight: 600;
+        color: $dark-color;
+        font-size: 0.9rem;
+      }
+
+      .form-input,
+      .form-select {
+        @include form-input;
+        width: 100%;
+      }
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $spacing-md;
+      margin-bottom: $spacing-md;
+
+      @include mobile {
+        grid-template-columns: 1fr;
+        gap: $spacing-sm;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: $spacing-sm;
+      justify-content: flex-end;
+
+      @include mobile {
+        flex-direction: column;
+        gap: $spacing-xs;
+      }
+    }
+  }
+
+  // Products List - Mobile Responsive
+  .products-list {
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid $border-color;
+
+      @include mobile {
+        border: none;
+        border-radius: 0;
+      }
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+
+      @include mobile {
+        font-size: 0.8rem;
+      }
+
+      th {
+        background: #f8f9fa;
+        padding: $spacing-sm;
+        text-align: left;
+        font-weight: 600;
+        color: $dark-color;
+        border-bottom: 1px solid $border-color;
+
+        @include mobile {
+          padding: $spacing-sm;
+          font-size: 0.8rem;
+        }
+      }
+
+      td {
+        padding: $spacing-sm;
+        border-bottom: 1px solid $border-color;
+        vertical-align: middle;
+
+        @include mobile {
+          padding: $spacing-sm;
+        }
+      }
+
+      .product-info {
+        .product-name {
+          font-weight: 600;
+          color: $dark-color;
+          margin-bottom: $spacing-xs;
+        }
+
+        .product-description {
+          font-size: 0.8rem;
+          color: #6c757d;
+          line-height: 1.3;
+        }
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        justify-content: center;
+
+        .btn-sm {
+          @include button-base;
+          width: 32px;
+          height: 32px;
+          padding: 0;
+          border-radius: 50%;
+          font-size: 0.9rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &.btn-decrease {
+            background: #ef4444;
+            color: white;
+            border: 1px solid #ef4444;
+
+            &:hover:not(:disabled) {
+              background: darken(#ef4444, 10%);
+              border-color: darken(#ef4444, 10%);
+            }
+
+            &:disabled {
+              background: #d1d5db;
+              border-color: #d1d5db;
+              cursor: not-allowed;
+            }
+          }
+
+          &.btn-increase {
+            background: #10b981;
+            color: white;
+            border: 1px solid #10b981;
+
+            &:hover {
+              background: darken(#10b981, 10%);
+              border-color: darken(#10b981, 10%);
+            }
+          }
+        }
+
+        span {
+          min-width: 24px;
+          text-align: center;
+          font-weight: 600;
+        }
+      }
+
+      .btn-icon {
+        @include button-base;
+        background: #8044ef;
+        color: white;
+        padding: $spacing-xs;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: darken(#ef4444, 10%);
+        }
+      }
+    }
+  }
+
+  // Bill Totals - Improved
+  .totals-section {
+    background: white;
+    padding: $spacing-lg;
+    border-radius: 12px;
+    box-shadow: $shadow-sm;
+    margin-bottom: $spacing-lg;
+
+    h3 {
+      margin: 0 0 $spacing-lg 0;
+      color: $dark-color;
+      font-size: 1.3rem;
+    }
+
+    .totals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $spacing-md;
+
+      @include mobile {
+        grid-template-columns: 1fr;
+        gap: $spacing-sm;
+      }
+
+      .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-sm 0;
+        border-bottom: 1px solid $border-color;
+
+        &.final-total {
+          font-weight: 700;
+          font-size: 1.1rem;
+          color: $primary-color;
+          border-bottom: 2px solid $primary-color;
+          margin-top: $spacing-sm;
+          padding-top: $spacing-md;
+        }
+
+        span:first-child {
+          font-weight: 600;
+          color: $dark-color;
+        }
+
+        span:last-child {
+          font-weight: 600;
+          color: $primary-color;
+        }
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+
+        label {
+          font-weight: 600;
+          color: $dark-color;
+          font-size: 0.9rem;
+        }
+
+        .form-input {
+          @include form-input;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  // Actions - Improved
+  .actions {
+    display: flex;
+    gap: $spacing-sm;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-md;
+    background: white;
+    border-radius: 12px;
+    box-shadow: $shadow-sm;
+
+    @include mobile {
+      flex-direction: column;
+      gap: $spacing-xs;
+    }
+
+    .actions-left {
+      display: flex;
+      gap: $spacing-sm;
+
+      @include mobile {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    .actions-right {
+      display: flex;
+      gap: $spacing-sm;
+
+      @include mobile {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    .btn {
+      @include button-base;
+      padding: $spacing-sm $spacing-lg;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+
+      &.btn-primary {
+        background: $primary-color;
+        color: white;
+        border: 1px solid $primary-color;
+
+        &:hover:not(:disabled) {
+          background: darken($primary-color, 10%);
+          border-color: darken($primary-color, 10%);
+        }
+
+        &:disabled {
+          background: #d1d5db;
+          border-color: #d1d5db;
+          cursor: not-allowed;
+        }
+      }
+
+      &.btn-success {
+        background: #10b981;
+        color: white;
+        border: 1px solid #10b981;
+
+        &:hover:not(:disabled) {
+          background: #059669;
+          border-color: #059669;
+        }
+
+        &:disabled {
+          background: #d1d5db;
+          border-color: #d1d5db;
+          cursor: not-allowed;
+        }
+      }
+
+      &.btn-secondary {
+        background: $secondary-color;
+        color: white;
+        border: 1px solid $secondary-color;
+
+        &:hover {
+          background: darken($secondary-color, 10%);
+          border-color: darken($secondary-color, 10%);
+        }
+      }
+
+      &.btn-danger {
+        background: #ef4444;
+        color: white;
+        border: 1px solid #ef4444;
+
+        &:hover {
+          background: darken(#ef4444, 10%);
+          border-color: darken(#ef4444, 10%);
+        }
+      }
+    }
+  }
+
+  // Empty State
+  .empty-state {
+    text-align: center;
+    padding: $spacing-xl;
+    color: #6c757d;
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: $spacing-md;
+    }
+
+    h4 {
+      margin: 0 0 $spacing-sm 0;
+      color: $dark-color;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  // Loading and Error States
+  .loading-spinner,
+  .error-message {
+    text-align: center;
+    padding: $spacing-xl;
+    font-size: 1.1rem;
+  }
+
+  .loading-spinner {
+    color: $primary-color;
+  }
+
+  .error-message {
+    color: #ef4444;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+  }
+}
+
+// ============================================================================
+// ICON STYLES
+// ============================================================================
+
+// Button icons
+.btn-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-right: $spacing-xs;
+}
+
+// Section icons
+.section-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: $primary-color;
+  flex-shrink: 0;
+  margin-right: $spacing-xs;
+}
+
+// Empty state icon
+.empty-icon {
+  width: 4rem;
+  height: 4rem;
+  color: #6b7280;
+  margin-bottom: $spacing-md;
+  
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Quantity controls - Elegant styling with distinct colors
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  
+  .btn-sm {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  
+  // Decrease button - Orange/amber theme
+  .btn-decrease {
+    border: 1px solid #fed7aa;
+    background: #fff7ed;
+    color: #ea580c;
+    
+    &:hover:not(:disabled) {
+      background: #ffedd5;
+      border-color: #fdba74;
+      color: #c2410c;
+    }
+    
+    svg {
+      width: 1rem;
+      height: 1rem;
+      margin: 0;
+    }
+  }
+  
+  // Increase button - Green theme
+  .btn-increase {
+    border: 1px solid #bbf7d0;
+    background: #f0fdf4;
+    color: #16a34a;
+    
+    &:hover:not(:disabled) {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #15803d;
+    }
+    
+    svg {
+      width: 1rem;
+      height: 1rem;
+      margin: 0;
+    }
+  }
+  
+  .quantity-value {
+    min-width: 3rem;
+    text-align: center;
+    font-weight: 600;
+    color: $dark-color;
+    font-size: 1rem;
+    padding: 0.5rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+  }
+}
+
+// Delete bill button - Fixed width
+.delete-bill-btn {
+  min-width: 150px !important;
+  padding: 0.75rem 1.5rem !important;
+  white-space: nowrap !important;
+}
+
+// Delete product button - Distinct red theme
+.btn-delete {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #dc2626;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+    transform: scale(1.05);
+  }
+  
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}
+
+/* Modal Styles - Shared with Billing Management */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 400px;
+  width: 85%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 20px 20px 0 20px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+
+  h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+.modal-body {
+  padding: 0 20px 16px 20px;
+
+  p {
+    margin: 0 0 12px 0;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .product-details {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 12px 0 0 0;
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #e5e7eb;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      span:first-child {
+        font-weight: 500;
+        color: #6b7280;
+      }
+
+      span:last-child {
+        font-weight: 600;
+        color: #1f2937;
+      }
+    }
+  }
+
+  .warning-text {
+    font-size: 0.875rem;
+    color: #dc2626;
+    font-weight: 500;
+    margin: 12px 0 0 0;
+  }
+}
+
+.modal-footer {
+  padding: 16px 20px 20px 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 16px;
+
+  .btn-cancel {
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.875rem;
+
+    &:hover {
+      background: #4b5563;
+    }
+  }
+
+  .btn-delete {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 110px;
+    justify-content: center;
+    font-size: 0.875rem;
+
+    &:hover {
+      background: rgba(220, 38, 38, 0.2);
+      border-color: #dc2626;
+    }
+
+    .btn-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
+// Delete Product Confirmation Modal
+.delete-confirm-modal {
+  max-width: 500px;
+  width: 90%;
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+    
+    h3 {
+      color: $danger-color;
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      color: $text-muted;
+      cursor: pointer;
+      padding: $spacing-xs;
+      border-radius: $border-radius-sm;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: #f8f9fa;
+        color: $dark-color;
+      }
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  
+  .modal-body {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+    
+    .warning-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: $spacing-lg;
+      
+      svg {
+        width: 48px;
+        height: 48px;
+        color: $warning-color;
+      }
+    }
+    
+    p {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: $spacing-lg;
+      line-height: 1.5;
+      
+      strong {
+        color: $primary-color;
+        font-weight: 600;
+      }
+    }
+    
+    .product-details {
+      background: #f8f9fa;
+      border-radius: $border-radius-md;
+      padding: $spacing-md;
+      margin: $spacing-lg 0;
+      text-align: left;
+      
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-xs 0;
+        border-bottom: 1px solid $border-color;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        &.total {
+          font-weight: 600;
+          color: $primary-color;
+          font-size: 1.1rem;
+          margin-top: $spacing-xs;
+          padding-top: $spacing-sm;
+          border-top: 2px solid $primary-color;
+        }
+        
+        .label {
+          color: $text-muted;
+          font-weight: 500;
+        }
+        
+        .value {
+          color: $dark-color;
+          font-weight: 600;
+        }
+      }
+    }
+    
+    .warning-text {
+      color: $text-muted;
+      font-size: 0.9rem;
+      font-style: italic;
+      margin: 0;
+    }
+  }
+  
+  .modal-footer {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: flex-end;
+    
+    .btn {
+      min-width: 120px;
+      
+      &.btn-secondary {
+        background: #f8f9fa;
+        color: #333;
+        border: 1px solid $border-color;
+        
+        &:hover {
+          background: $border-color;
+        }
+      }
+      
+      &.btn-danger {
+        background: $danger-color;
+        color: white;
+        border: 1px solid $danger-color;
+        
+        &:hover:not(:disabled) {
+          background: darken($danger-color, 10%);
+          border-color: darken($danger-color, 10%);
+        }
+        
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+

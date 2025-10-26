@@ -1,0 +1,229 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.products-container {
+  @include responsive-padding($spacing-xl, $spacing-lg, $spacing-md);
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .catalog-header {
+    text-align: center;
+    margin-bottom: $spacing-xxl;
+
+    .breadcrumb {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      color: #6b7280;
+
+      .breadcrumb-item {
+        &.active {
+          color: #3b82f6;
+          font-weight: 600;
+        }
+
+        &.clickable {
+          cursor: pointer;
+          padding: 4px 8px;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+          color: #6b7280;
+
+          &:hover {
+            background: #f3f4f6;
+            color: #374151;
+          }
+        }
+      }
+
+      .breadcrumb-separator {
+        color: #d1d5db;
+      }
+    }
+
+    h1 {
+      @include responsive-text(2rem, 1.75rem, 1.5rem);
+      color: $dark-color;
+      margin-bottom: $spacing-sm;
+      font-weight: 700;
+    }
+
+    p {
+      @include responsive-text(1.1rem, 1rem, 0.9rem);
+      color: $text-muted;
+      margin: 0;
+    }
+  }
+
+  .loading-state,
+  .error-state,
+  .empty-state {
+    text-align: center;
+    padding: $spacing-xxl;
+    color: $text-muted;
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid $border-color;
+      border-top: 3px solid $primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto $spacing-md;
+    }
+
+    p {
+      @include responsive-text(1.1rem, 1rem, 0.9rem);
+      margin-bottom: $spacing-lg;
+    }
+
+    .btn-primary {
+      @include button-base;
+      @include button-variant($primary-color, $primary-hover);
+      @include button-size($spacing-md, $spacing-lg, 1rem);
+    }
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xxl;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $spacing-md;
+    }
+
+    .product-card {
+      @include card-base;
+      padding: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-lg;
+        border-color: $primary-color;
+      }
+
+      .product-image {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          transition: transform 0.3s ease;
+          transform: scale(1.05); // Biraz büyüt
+        }
+
+        .product-placeholder {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: $light-color;
+          color: $text-muted;
+          font-size: 0.9rem;
+          font-weight: 500;
+        }
+
+        &:hover img {
+          transform: scale(1.1); // Hover'da daha da büyüt
+        }
+      }
+
+      .product-content {
+        padding: $spacing-lg;
+
+        h3 {
+          @include responsive-text(1.25rem, 1.125rem, 1rem);
+          color: $dark-color;
+          margin: 0 0 $spacing-sm 0;
+          font-weight: 600;
+          line-height: 1.3;
+        }
+
+        .product-description {
+          @include responsive-text(0.9rem, 0.875rem, 0.8rem);
+          color: $text-muted;
+          margin: 0 0 $spacing-md 0;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .product-price {
+          @include responsive-text(1.5rem, 1.25rem, 1.125rem);
+          color: $primary-color;
+          font-weight: 700;
+          margin-bottom: $spacing-sm;
+        }
+
+        .product-meta {
+          display: flex;
+          gap: $spacing-md;
+          flex-wrap: wrap;
+
+          .prep-time,
+          .popularity {
+            @include responsive-text(0.8rem, 0.75rem, 0.7rem);
+            color: $text-muted;
+            background: $light-color;
+            padding: $spacing-xs $spacing-sm;
+            border-radius: $border-radius-sm;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+            
+            .prep-icon {
+              width: 1rem;
+              height: 1rem;
+              flex-shrink: 0;
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  .catalog-actions {
+    text-align: center;
+
+    .btn-secondary {
+      @include button-base;
+      @include button-variant($secondary-color, $secondary-hover);
+      @include button-size($spacing-md, $spacing-xl, 1rem);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      
+      .btn-icon {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

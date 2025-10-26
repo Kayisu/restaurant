@@ -1,0 +1,1493 @@
+<div class="catalog-management-container">
+  <!-- Header -->
+  <div class="management-header">
+    <h1>
+      <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14,2 14,8 20,8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10,9 9,9 8,9"/>
+      </svg>
+      Catalog Management
+    </h1>
+    <p>Manage categories, subcategories, and products</p>
+    
+    <!-- Info Notice -->
+    <div class="info-notice">
+      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 16v-4"/>
+        <path d="M12 8h.01"/>
+      </svg>
+      <div class="info-content">
+        <strong>Important:</strong> It is not recommended to update product prices or menu contents while there are active orders and bills. 
+        Changes may affect ongoing transactions and cause inconsistencies.
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="management-tabs">
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'categories'"
+      (click)="setActiveTab('categories')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14,2 14,8 20,8"/>
+      </svg>
+      Categories
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'subcategories'"
+      (click)="setActiveTab('subcategories')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14,2 14,8 20,8"/>
+      </svg>
+      Subcategories
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'products'"
+      (click)="setActiveTab('products')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M8 10h8"/>
+        <path d="M8 14h8"/>
+        <path d="M8 18h5"/>
+      </svg>
+      Products
+    </button>
+  </div>
+
+  <!-- Categories Management -->
+  <div *ngIf="activeTab() === 'categories'" class="management-section">
+    <div class="section-actions">
+      <button class="btn-primary" (click)="toggleAddCategoryForm()">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path *ngIf="!showAddCategoryForm()" d="M12 5v14"/>
+          <path *ngIf="!showAddCategoryForm()" d="M5 12h14"/>
+          <path *ngIf="showAddCategoryForm()" d="M18 6L6 18"/>
+          <path *ngIf="showAddCategoryForm()" d="M6 6l12 12"/>
+        </svg>
+        {{ showAddCategoryForm() ? 'Cancel' : 'Add Category' }}
+      </button>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="modal-overlay" *ngIf="showAddCategoryForm()">
+      <div class="modal-content large-modal">
+        <div class="modal-header">
+          <h2>Add New Category</h2>
+          <div class="header-actions">
+            <button class="close-btn" (click)="toggleAddCategoryForm()">×</button>
+          </div>
+        </div>
+        
+        <div class="modal-body">
+          <form (ngSubmit)="createCategory()" #categoryForm="ngForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="categoryName">Name *</label>
+                <input 
+                  id="categoryName"
+                  type="text" 
+                  [(ngModel)]="newCategory.name"
+                  name="categoryName"
+                  placeholder="Enter category name"
+                  required
+                  #categoryName="ngModel"
+                />
+                <div class="error-message" *ngIf="categoryName.invalid && categoryName.touched">
+                  Category name is required
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="categoryDescription">Description</label>
+                <textarea 
+                  id="categoryDescription"
+                  [(ngModel)]="newCategory.description"
+                  name="categoryDescription"
+                  placeholder="Enter category description (optional)"
+                  rows="3"
+                ></textarea>
+              </div>
+
+
+              <!-- Image Upload Section -->
+              <div class="form-group full-width image-upload-group">
+                <label>Category Image</label>
+                <app-image-upload
+                  [config]="categoryImageUploadConfig"
+                  [initialImageUrl]="newCategory.image_url"
+                  (imageUploaded)="onImageUploaded($event)"
+                  (imageRemoved)="onImageRemoved()">
+                </app-image-upload>
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="toggleAddCategoryForm()">
+            Cancel
+          </button>
+          <button 
+            class="btn-primary"
+            (click)="createCategory()"
+            [disabled]="!categoryForm.valid || loading()"
+          >
+            {{ loading() ? 'Creating...' : 'Create Category' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categories List -->
+    <div class="data-table">
+      <div class="table-header categories-header">
+        <div class="col-name">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('name')">
+              Name <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('name') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('name') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('name') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('name') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <input 
+              type="text" 
+              placeholder="Filter by name..." 
+              class="header-filter"
+              [(ngModel)]="nameFilter"
+              (input)="onNameFilterChange()"
+            />
+          </div>
+        </div>
+        <div class="col-description">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('description')">
+              Description <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('description') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('description') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('description') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('description') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <input 
+              type="text" 
+              placeholder="Filter by description..." 
+              class="header-filter"
+              [(ngModel)]="searchTerm"
+              (input)="onSearchChange()"
+            />
+          </div>
+        </div>
+        <div class="col-status">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('status')">
+              Status <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('status') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('status') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('status') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('status') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <select 
+              class="header-filter"
+              [(ngModel)]="statusFilter" 
+              (change)="onStatusFilterChange()"
+            >
+              <option value="">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-actions">
+          <div class="header-content">
+            <span>Actions</span>
+            <button class="btn-secondary btn-clear-filters" (click)="clearFilters()">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="table-body">
+        <div *ngIf="loadingCategories()" class="loading-row">
+          <div class="col-full">Loading categories...</div>
+        </div>
+        
+        <div *ngIf="!loadingCategories() && filteredCategories().length === 0" class="empty-row">
+          <div class="col-full">No categories found. Create your first category!</div>
+        </div>
+        
+        <ng-container *ngFor="let category of filteredCategories()">
+          <div *ngIf="editingCategoryId() !== category.category_id" class="table-row categories-row">
+          <div class="col-name">
+            <strong>{{ category.name }}</strong>
+          </div>
+          <div class="col-description">
+            {{ category.description || 'No description' }}
+          </div>
+          <div class="col-status">
+            <span class="status-badge" [class.active]="category.is_active" [class.inactive]="!category.is_active">
+              {{ category.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+          <div class="col-actions">
+            <button class="btn-edit" (click)="openEditCategoryModal(category)">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Edit
+            </button>
+            <button 
+              [class]="category.is_active ? 'btn-warning' : 'btn-enable'" 
+              (click)="toggleCategoryStatus(category)"
+              [disabled]="loading()"
+            >
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path *ngIf="category.is_active" d="M18 6L6 18"/>
+                <path *ngIf="category.is_active" d="M6 6l12 12"/>
+                <path *ngIf="!category.is_active" d="M20 6L9 17l-5-5"/>
+              </svg>
+              {{ category.is_active ? 'Disable' : 'Enable' }}
+            </button>
+            <button class="btn-danger" (click)="hardDeleteCategory(category.category_id)">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              Delete
+            </button>
+          </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngFor="let category of categories()">
+          <!-- Edit Category Form -->
+          <div *ngIf="editingCategoryId() === category.category_id" class="edit-form-row">
+            <div class="col-full">
+              <div class="inline-edit-form">
+                <h4>Edit Category: {{ category.name }}</h4>
+                
+                <div class="edit-form-grid">
+                  <div class="form-group">
+                    <label for="edit_category_name">Name *</label>
+                    <input 
+                      id="edit_category_name"
+                      type="text" 
+                      [(ngModel)]="editCategoryForm.name"
+                      placeholder="Enter category name"
+                    />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="edit_category_description">Description</label>
+                    <textarea 
+                      id="edit_category_description"
+                      [(ngModel)]="editCategoryForm.description"
+                      placeholder="Enter category description"
+                      rows="2"
+                    ></textarea>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="checkbox-label">
+                      <input 
+                        type="checkbox" 
+                        [(ngModel)]="editCategoryForm.is_active"
+                      />
+                      <span class="checkmark"></span>
+                      Active
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="edit-form-actions">
+                  <button class="btn-success" (click)="updateCategory(category.category_id)">
+                    Save Changes
+                  </button>
+                  <button class="btn-secondary" (click)="cancelEditCategory()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subcategories Management -->
+  <div *ngIf="activeTab() === 'subcategories'" class="management-section">
+    <div class="section-actions">
+      <button class="btn-primary" (click)="toggleAddSubcategoryForm()">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path *ngIf="!showAddSubcategoryForm()" d="M12 5v14"/>
+          <path *ngIf="!showAddSubcategoryForm()" d="M5 12h14"/>
+          <path *ngIf="showAddSubcategoryForm()" d="M18 6L6 18"/>
+          <path *ngIf="showAddSubcategoryForm()" d="M6 6l12 12"/>
+        </svg>
+        {{ showAddSubcategoryForm() ? 'Cancel' : 'Add Subcategory' }}
+      </button>
+    </div>
+
+    <!-- Add Subcategory Modal -->
+    <div class="modal-overlay" *ngIf="showAddSubcategoryForm()">
+      <div class="modal-content large-modal">
+        <div class="modal-header">
+          <h2>Add New Subcategory</h2>
+          <div class="header-actions">
+            <button class="close-btn" (click)="toggleAddSubcategoryForm()">×</button>
+          </div>
+        </div>
+        
+        <div class="modal-body">
+          <form (ngSubmit)="createSubcategory()" #subcategoryForm="ngForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="subcategoryName">Name *</label>
+                <input 
+                  id="subcategoryName"
+                  type="text" 
+                  [(ngModel)]="newSubcategory.name"
+                  name="subcategoryName"
+                  placeholder="Enter subcategory name"
+                  required
+                  #subcategoryName="ngModel"
+                />
+                <div class="error-message" *ngIf="subcategoryName.invalid && subcategoryName.touched">
+                  Subcategory name is required
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="subcategoryCategory">Category *</label>
+                <select 
+                  id="subcategoryCategory"
+                  [(ngModel)]="newSubcategory.category_id"
+                  name="subcategoryCategory"
+                  required
+                  #subcategoryCategory="ngModel"
+                >
+                  <option value="">Select Category</option>
+                  <option *ngFor="let category of categories()" [value]="category.category_id">
+                    {{ category.name }}
+                  </option>
+                </select>
+                <div class="error-message" *ngIf="subcategoryCategory.invalid && subcategoryCategory.touched">
+                  Category is required
+                </div>
+              </div>
+
+
+              <div class="form-group full-width">
+                <label for="subcategoryDescription">Description</label>
+                <textarea 
+                  id="subcategoryDescription"
+                  [(ngModel)]="newSubcategory.description"
+                  name="subcategoryDescription"
+                  placeholder="Enter subcategory description (optional)"
+                  rows="3"
+                ></textarea>
+              </div>
+
+              <!-- Image Upload Section -->
+              <div class="form-group full-width image-upload-group">
+                <label>Subcategory Image</label>
+                <app-image-upload
+                  [config]="subcategoryImageUploadConfig"
+                  [initialImageUrl]="newSubcategory.image_url"
+                  (imageUploaded)="onImageUploaded($event)"
+                  (imageRemoved)="onImageRemoved()">
+                </app-image-upload>
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="toggleAddSubcategoryForm()">
+            Cancel
+          </button>
+          <button 
+            class="btn-primary"
+            (click)="createSubcategory()"
+            [disabled]="!subcategoryForm.valid || loading()"
+          >
+            {{ loading() ? 'Creating...' : 'Create Subcategory' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subcategories List -->
+    <div class="data-table">
+      <div class="table-header subcategories-header">
+        <div class="col-name">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('name')">
+              Name <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('name') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('name') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('name') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('name') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <input 
+              type="text" 
+              placeholder="Filter by name..." 
+              class="header-filter"
+              [(ngModel)]="nameFilter"
+              (input)="onNameFilterChange()"
+            />
+          </div>
+        </div>
+        <div class="col-category">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('category')">
+              Category <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('category') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('category') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('category') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('category') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <select 
+              class="header-filter"
+              [(ngModel)]="categoryFilter" 
+              (change)="onCategoryFilterChange()"
+            >
+              <option value="">All</option>
+              <option *ngFor="let category of categories()" [value]="category.category_id">
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-description">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('description')">
+              Description <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('description') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('description') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('description') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('description') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <input 
+              type="text" 
+              placeholder="Filter by description..." 
+              class="header-filter"
+              [(ngModel)]="searchTerm"
+              (input)="onSearchChange()"
+            />
+          </div>
+        </div>
+        <div class="col-status">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('status')">
+              Status <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('status') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('status') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('status') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('status') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <select 
+              class="header-filter"
+              [(ngModel)]="statusFilter" 
+              (change)="onStatusFilterChange()"
+            >
+              <option value="">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-actions">
+          <div class="header-content">
+            <span>Actions</span>
+            <button class="btn-secondary btn-clear-filters" (click)="clearFilters()">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="table-body">
+        <div *ngIf="loadingSubcategories()" class="loading-row">
+          <div class="col-full">Loading subcategories...</div>
+        </div>
+        
+        <div *ngIf="!loadingSubcategories() && filteredSubcategories().length === 0" class="empty-row">
+          <div class="col-full">No subcategories found. Create your first subcategory!</div>
+        </div>
+        
+        <ng-container *ngFor="let subcategory of filteredSubcategories()">
+          <div *ngIf="editingSubcategoryId() !== subcategory.subcategory_id" class="table-row subcategories-row">
+          <div class="col-name">
+            <strong>{{ subcategory.name }}</strong>
+          </div>
+          <div class="col-category">
+            {{ getCategoryName(subcategory['category_id']) }}
+          </div>
+          <div class="col-description">
+            {{ subcategory.description || 'No description' }}
+          </div>
+          <div class="col-status">
+            <span class="status-badge" [class.active]="subcategory.is_active" [class.inactive]="!subcategory.is_active">
+              {{ subcategory.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+          <div class="col-actions">
+            <button class="btn-edit" (click)="openEditSubcategoryModal(subcategory)">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Edit
+            </button>
+            <button 
+              [class]="subcategory.is_active ? 'btn-warning' : 'btn-enable'" 
+              (click)="toggleSubcategoryStatus(subcategory)"
+              [disabled]="loading()"
+            >
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path *ngIf="subcategory.is_active" d="M18 6L6 18"/>
+                <path *ngIf="subcategory.is_active" d="M6 6l12 12"/>
+                <path *ngIf="!subcategory.is_active" d="M20 6L9 17l-5-5"/>
+              </svg>
+              {{ subcategory.is_active ? 'Disable' : 'Enable' }}
+            </button>
+            <button class="btn-danger" (click)="hardDeleteSubcategory(subcategory.subcategory_id)">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              Delete
+            </button>
+          </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngFor="let subcategory of subcategories()">
+          <!-- Edit Subcategory Form -->
+          <div *ngIf="editingSubcategoryId() === subcategory.subcategory_id" class="edit-form-row">
+            <div class="col-full">
+              <div class="inline-edit-form">
+                <h4>Edit Subcategory: {{ subcategory.name }}</h4>
+                
+                <div class="edit-form-grid">
+                  <div class="form-group">
+                    <label for="edit_subcategory_name">Name *</label>
+                    <input 
+                      id="edit_subcategory_name"
+                      type="text" 
+                      [(ngModel)]="editSubcategoryForm.name"
+                      placeholder="Enter subcategory name"
+                    />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="edit_subcategory_category">Category *</label>
+                    <select 
+                      id="edit_subcategory_category"
+                      [(ngModel)]="editSubcategoryForm.category_id"
+                    >
+                      <option value="">Select Category</option>
+                      <option *ngFor="let category of categories()" [value]="category.category_id">
+                        {{ category.name }}
+                      </option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="edit_subcategory_description">Description</label>
+                    <textarea 
+                      id="edit_subcategory_description"
+                      [(ngModel)]="editSubcategoryForm.description"
+                      placeholder="Enter subcategory description"
+                      rows="2"
+                    ></textarea>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="checkbox-label">
+                      <input 
+                        type="checkbox" 
+                        [(ngModel)]="editSubcategoryForm.is_active"
+                      />
+                      <span class="checkmark"></span>
+                      Active
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="edit-form-actions">
+                  <button class="btn-success" (click)="updateSubcategory(subcategory.subcategory_id)">
+                    Save Changes
+                  </button>
+                  <button class="btn-secondary" (click)="cancelEditSubcategory()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Management -->
+  <div *ngIf="activeTab() === 'products'" class="management-section">
+
+    <div class="section-actions">
+      <button class="btn-primary" (click)="toggleAddProductForm()">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path *ngIf="!showAddProductForm()" d="M12 5v14"/>
+          <path *ngIf="!showAddProductForm()" d="M5 12h14"/>
+          <path *ngIf="showAddProductForm()" d="M18 6L6 18"/>
+          <path *ngIf="showAddProductForm()" d="M6 6l12 12"/>
+        </svg>
+        {{ showAddProductForm() ? 'Cancel' : 'Add Product' }}
+      </button>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal-overlay" *ngIf="showAddProductForm()">
+      <div class="modal-content large-modal">
+        <div class="modal-header">
+          <h2>Add New Product</h2>
+          <div class="header-actions">
+            <button class="close-btn" (click)="toggleAddProductForm()">×</button>
+          </div>
+        </div>
+        
+        <div class="modal-body">
+          <form (ngSubmit)="createProduct()" #productForm="ngForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="productName">Name *</label>
+            <input 
+              id="productName"
+              type="text" 
+              [ngModel]="newProduct().name"
+              (ngModelChange)="updateNewProductName($event)"
+              name="productName"
+              placeholder="Enter product name"
+              required
+              #productName="ngModel"
+            />
+            <div class="error-message" *ngIf="productName.invalid && productName.touched">
+              Product name is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productCategory">Category *</label>
+            <select 
+              id="productCategory"
+              [ngModel]="newProduct().category_id"
+              (ngModelChange)="updateNewProductCategory($event)"
+              (change)="onCategoryChangeForProduct(+$event.target.value)"
+              name="productCategory"
+              required
+              #productCategory="ngModel"
+            >
+              <option value="">Select Category</option>
+              <option *ngFor="let category of categories()" [value]="category.category_id">
+                {{ category.name }}
+              </option>
+            </select>
+            <div class="error-message" *ngIf="productCategory.invalid && productCategory.touched">
+              Category is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productSubcategory">Subcategory *</label>
+            <select 
+              id="productSubcategory"
+              [ngModel]="newProduct().subcategory_id"
+              (ngModelChange)="updateNewProductSubcategory($event)"
+              name="productSubcategory"
+              required
+              #productSubcategory="ngModel"
+              [disabled]="!newProduct().category_id"
+            >
+              <option value="">Select Subcategory</option>
+              <option *ngFor="let subcategory of getFilteredSubcategoriesForProduct()" [value]="subcategory.subcategory_id">
+                {{ subcategory.name }}
+              </option>
+            </select>
+            <div class="error-message" *ngIf="productSubcategory.invalid && productSubcategory.touched">
+              Subcategory is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productPrice">Price *</label>
+            <input 
+              id="productPrice"
+              type="number" 
+              [ngModel]="newProduct().price"
+              (ngModelChange)="updateNewProductPrice($event)"
+              name="productPrice"
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+              required
+              #productPrice="ngModel"
+            />
+            <div class="error-message" *ngIf="productPrice.invalid && productPrice.touched">
+              <span *ngIf="productPrice.errors?.['required']">Price is required</span>
+              <span *ngIf="productPrice.errors?.['min']">Price must be greater than 0</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productPreparationTime">Preparation Time (minutes)</label>
+            <input 
+              id="productPreparationTime"
+              type="number" 
+              [(ngModel)]="newProduct.preparation_time"
+              name="productPreparationTime"
+              placeholder="0"
+              min="0"
+            />
+          </div>
+
+
+          <div class="form-group full-width">
+            <label for="productDescription">Description</label>
+            <textarea 
+              id="productDescription"
+              [(ngModel)]="newProduct.description"
+              name="productDescription"
+              placeholder="Enter product description (optional)"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <!-- Image Upload Section - Moved to bottom -->
+          <div class="form-group full-width image-upload-group">
+            <label>Product Image</label>
+            <app-image-upload
+              [config]="imageUploadConfig"
+              [initialImageUrl]="newProduct.image_url"
+              (imageUploaded)="onImageUploaded($event)"
+              (imageRemoved)="onImageRemoved()">
+            </app-image-upload>
+          </div>
+        </div>
+
+          </form>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="toggleAddProductForm()">
+            Cancel
+          </button>
+          <button 
+            class="btn-primary"
+            (click)="createProduct()"
+            [disabled]="!productForm.valid || loading()"
+          >
+            {{ loading() ? 'Creating...' : 'Create Product' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products List -->
+    <div class="data-table">
+      <div class="table-header products-header">
+        <div class="col-name">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('name')">
+              Name <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('name') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('name') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('name') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('name') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <input 
+              type="text" 
+              placeholder="Filter by name..." 
+              class="header-filter"
+              [(ngModel)]="nameFilter"
+              (input)="onNameFilterChange()"
+            />
+          </div>
+        </div>
+        <div class="col-category">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('category')">
+              Category <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('category') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('category') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('category') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('category') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <select 
+              class="header-filter"
+              [(ngModel)]="categoryFilter" 
+              (change)="onCategoryFilterChange()"
+            >
+              <option value="">All</option>
+              <option *ngFor="let category of categories()" [value]="category.category_id">
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-subcategory">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('subcategory')">
+              Subcategory <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('subcategory') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('subcategory') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('subcategory') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('subcategory') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <select 
+              class="header-filter"
+              [(ngModel)]="subcategoryFilter" 
+              (change)="onSubcategoryFilterChange()"
+              [disabled]="!categoryFilter()"
+            >
+              <option value="">All</option>
+              <option *ngFor="let subcategory of subcategories()" [value]="subcategory.subcategory_id">
+                {{ subcategory.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-price">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('price')">
+              Price <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('price') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('price') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('price') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('price') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <div class="price-filters">
+              <input 
+                type="number" 
+                placeholder="Min price..." 
+                class="header-filter price-filter-min"
+                [(ngModel)]="priceFilter"
+                (input)="onPriceFilterChange()"
+                min="0"
+                step="0.01"
+              />
+              <input 
+                type="number" 
+                placeholder="Max price..." 
+                class="header-filter price-filter-max"
+                [(ngModel)]="maxPriceFilter"
+                (input)="onMaxPriceFilterChange()"
+                min="0"
+                step="0.01"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-status">
+          <div class="header-content">
+            <span class="sortable" (click)="sortData('status')">
+              Status <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path *ngIf="getSortIcon('status') === 'sort'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('status') === 'sort'" d="M8 15l4 4 4-4"/>
+  <path *ngIf="getSortIcon('status') === 'sort-asc'" d="M8 9l4-4 4 4"/>
+  <path *ngIf="getSortIcon('status') === 'sort-desc'" d="M8 15l4 4 4-4"/>
+</svg>
+            </span>
+            <select 
+              class="header-filter"
+              [(ngModel)]="statusFilter" 
+              (change)="onStatusFilterChange()"
+            >
+              <option value="">All</option>
+              <option value="available">Available</option>
+              <option value="unavailable">Unavailable</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-actions">
+          <div class="header-content">
+            <span>Actions</span>
+            <button class="btn-secondary btn-clear-filters" (click)="clearFilters()">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="table-body">
+        <div *ngIf="loadingProducts()" class="loading-row">
+          <div class="col-full">Loading products...</div>
+        </div>
+        
+        <div *ngIf="!loadingProducts() && filteredProducts().length === 0" class="empty-row">
+          <div class="col-full">No products found. Create your first product!</div>
+        </div>
+        
+        <ng-container *ngFor="let product of filteredProducts()">
+          <div *ngIf="editingProductId() !== product.product_id" class="table-row products-row">
+          <div class="col-name">
+            <strong>{{ product.name }}</strong>
+          </div>
+          <div class="col-category">
+            {{ getCategoryName(product.category_id) }}
+          </div>
+          <div class="col-subcategory">
+            {{ getSubcategoryName(product.subcategory_id) }}
+          </div>
+          <div class="col-price">
+            ₺{{ (product.price | number:'1.2-2') }}
+          </div>
+          <div class="col-status">
+            <span class="status-badge" [class.active]="product.is_available" [class.inactive]="!product.is_available">
+              {{ product.is_available ? 'Available' : 'Unavailable' }}
+            </span>
+          </div>
+          <div class="col-actions">
+            <button class="btn-edit" (click)="openEditProductModal(product)">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Edit
+            </button>
+            <button 
+              [class]="product.is_available ? 'btn-warning' : 'btn-enable'" 
+              (click)="toggleProductStatus(product)"
+              [disabled]="loading()"
+            >
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path *ngIf="product.is_available" d="M18 6L6 18"/>
+                <path *ngIf="product.is_available" d="M6 6l12 12"/>
+                <path *ngIf="!product.is_available" d="M20 6L9 17l-5-5"/>
+              </svg>
+              {{ product.is_available ? 'Disable' : 'Enable' }}
+            </button>
+            <button class="btn-danger" (click)="deleteProduct(product.product_id)">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              Delete
+            </button>
+          </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngFor="let product of products()">
+          <!-- Edit Product Form -->
+          <div *ngIf="editingProductId() === product.product_id" class="edit-form-row">
+            <div class="col-full">
+              <div class="inline-edit-form">
+                <h4>Edit Product: {{ product.name }}</h4>
+                
+                <div class="edit-form-grid">
+                  <div class="form-group">
+                    <label for="edit_product_name">Name *</label>
+                    <input 
+                      id="edit_product_name"
+                      name="edit_product_name"
+                      type="text" 
+                      [(ngModel)]="editProductForm.name"
+                      placeholder="Enter product name"
+                    />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="edit_product_category">Category *</label>
+                    <select 
+                      id="edit_product_category"
+                      name="edit_product_category"
+                      [(ngModel)]="editProductForm.category_id"
+                    >
+                      <option value="">Select Category</option>
+                      <option *ngFor="let category of categories()" [value]="category.category_id">
+                        {{ category.name }}
+                      </option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="edit_product_subcategory">Subcategory *</label>
+                    <select 
+                      id="edit_product_subcategory"
+                      name="edit_product_subcategory"
+                      [(ngModel)]="editProductForm.subcategory_id"
+                      [disabled]="!editProductForm.category_id"
+                    >
+                      <option value="">Select Subcategory</option>
+                      <option *ngFor="let subcategory of subcategories()" [value]="subcategory.subcategory_id">
+                        {{ subcategory.name }}
+                      </option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="edit_product_price">Price *</label>
+                    <input 
+                      id="edit_product_price"
+                      name="edit_product_price"
+                      type="number" 
+                      [(ngModel)]="editProductForm.price"
+                      placeholder="0.00"
+                      step="0.01"
+                      min="0"
+                    />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="edit_product_description">Description</label>
+                    <textarea 
+                      id="edit_product_description"
+                      name="edit_product_description"
+                      [(ngModel)]="editProductForm.description"
+                      placeholder="Enter product description"
+                      rows="2"
+                    ></textarea>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="edit_product_preparation_time">Preparation Time (minutes)</label>
+                    <input 
+                      id="edit_product_preparation_time"
+                      name="edit_product_preparation_time"
+                      type="number" 
+                      formControlName="preparation_time"
+                      placeholder="0"
+                      min="0"
+                    />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="checkbox-label">
+                      <input 
+                        type="checkbox" 
+                        [(ngModel)]="editProductForm.is_available"
+                      />
+                      <span class="checkmark"></span>
+                      Available
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="edit-form-actions">
+                  <button class="btn-success" (click)="updateProduct(product.product_id)">
+                    Save Changes
+                  </button>
+                  <button class="btn-secondary" (click)="cancelEditProduct()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Product Modal -->
+<div *ngIf="showEditProductModal()" class="modal-overlay" (click)="closeEditProductModal()">
+  <div class="modal-content large-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Edit Product: {{ selectedProduct()?.name }}</h3>
+      <div class="header-actions">
+        <button class="modal-close" (click)="closeEditProductModal()">
+          <span class="close-icon">×</span>
+        </button>
+      </div>
+    </div>
+    
+    <div class="modal-body">
+      <form [formGroup]="editProductForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="modal_product_name">Name *</label>
+            <input 
+              id="modal_product_name"
+              formControlName="name"
+              type="text" 
+              placeholder="Enter product name"
+            />
+          </div>
+        
+        <!-- Category and Subcategory fields removed for edit modal -->
+        
+        <div class="form-group">
+          <label for="modal_product_price">Price *</label>
+          <input 
+            id="modal_product_price"
+            formControlName="price"
+            type="number" 
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="modal_product_description">Description</label>
+          <textarea 
+            id="modal_product_description"
+            formControlName="description"
+            placeholder="Enter product description"
+            rows="3"
+          ></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="modal_product_preparation_time">Preparation Time (minutes)</label>
+          <input 
+            id="modal_product_preparation_time"
+            formControlName="preparation_time"
+            type="number" 
+            placeholder="0"
+            min="0"
+          />
+        </div>
+        
+        <!-- Image Upload Section -->
+        <div class="form-group full-width image-upload-group">
+          <label>Product Image</label>
+          <app-image-upload
+            [config]="imageUploadConfig"
+            [initialImageUrl]="editProductForm.image_url"
+            (imageUploaded)="onImageUploaded($event)"
+            (imageRemoved)="onImageRemoved()">
+          </app-image-upload>
+        </div>
+        </div>
+      </form>
+      
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeEditProductModal()">
+          Cancel
+        </button>
+        <button 
+          class="btn-primary"
+          (click)="updateProduct(selectedProduct()?.product_id || '')"
+          [disabled]="!editProductForm.valid || loading()"
+        >
+          {{ loading() ? 'Saving...' : 'Update Product' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div *ngIf="showEditCategoryModal()" class="modal-overlay" (click)="closeEditCategoryModal()">
+  <div class="modal-content large-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Edit Category: {{ selectedCategory()?.name }}</h3>
+      <div class="header-actions">
+        <button class="modal-close" (click)="closeEditCategoryModal()">
+          <span class="close-icon">×</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div class="edit-form-grid">
+        <div class="form-group">
+          <label for="modal_category_name">Name *</label>
+          <input 
+            id="modal_category_name"
+            type="text" 
+            [(ngModel)]="editCategoryForm.name"
+            placeholder="Enter category name"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="modal_category_description">Description</label>
+          <textarea 
+            id="modal_category_description"
+            [(ngModel)]="editCategoryForm.description"
+            placeholder="Enter category description"
+            rows="3"
+          ></textarea>
+        </div>
+        
+        
+        <!-- Image Upload Section -->
+        <div class="form-group image-upload-group">
+          <label>Category Image</label>
+          <app-image-upload
+            [config]="categoryImageUploadConfig"
+            [initialImageUrl]="editCategoryForm.image_url"
+            (imageUploaded)="onImageUploaded($event)"
+            (imageRemoved)="onImageRemoved()">
+          </app-image-upload>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeEditCategoryModal()">
+        Cancel
+      </button>
+      <button class="btn-primary" (click)="updateCategory(selectedCategory()!.category_id)" [disabled]="loading()">
+        <span *ngIf="loading()" class="loading-spinner-small"></span>
+        {{ loading() ? 'Saving...' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Subcategory Modal -->
+<div *ngIf="showEditSubcategoryModal()" class="modal-overlay" (click)="closeEditSubcategoryModal()">
+  <div class="modal-content large-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Edit Subcategory: {{ selectedSubcategory()?.name }}</h3>
+      <div class="header-actions">
+        <button class="modal-close" (click)="closeEditSubcategoryModal()">
+          <span class="close-icon">×</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div class="edit-form-grid">
+        <div class="form-group">
+          <label for="modal_subcategory_name">Name *</label>
+          <input 
+            id="modal_subcategory_name"
+            type="text" 
+            [(ngModel)]="editSubcategoryForm.name"
+            placeholder="Enter subcategory name"
+          />
+        </div>
+        
+        
+        <div class="form-group">
+          <label for="modal_subcategory_description">Description</label>
+          <textarea 
+            id="modal_subcategory_description"
+            [(ngModel)]="editSubcategoryForm.description"
+            placeholder="Enter subcategory description"
+            rows="3"
+          ></textarea>
+        </div>
+        
+        
+        <!-- Image Upload Section -->
+        <div class="form-group image-upload-group">
+          <label>Subcategory Image</label>
+          <app-image-upload
+            [config]="subcategoryImageUploadConfig"
+            [initialImageUrl]="editSubcategoryForm.image_url"
+            (imageUploaded)="onImageUploaded($event)"
+            (imageRemoved)="onImageRemoved()">
+          </app-image-upload>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeEditSubcategoryModal()">
+        Cancel
+      </button>
+      <button class="btn-primary" (click)="updateSubcategory(selectedSubcategory()!.subcategory_id)" [disabled]="loading()">
+        <span *ngIf="loading()" class="loading-spinner-small"></span>
+        {{ loading() ? 'Saving...' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Hard Delete Category Modal -->
+<div *ngIf="showHardDeleteModal()" class="modal-overlay" (click)="cancelHardDeleteCategory()">
+  <div class="modal-content small-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>
+        <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"/>
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+        Delete Category
+      </h3>
+      <button class="modal-close" (click)="cancelHardDeleteCategory()">
+        <span class="close-icon">×</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p>Are you sure you want to delete this category?</p>
+      <div class="item-info" *ngIf="selectedCategory()">
+        <p><strong>Category:</strong> {{ selectedCategory()?.name }}</p>
+      </div>
+      <div class="warning-box">
+        <p>
+          <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <strong>Warning:</strong> This will permanently delete the category and all associated subcategories and products!
+        </p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="cancelHardDeleteCategory()" [disabled]="loading()">
+        Cancel
+      </button>
+      <button class="btn-danger" (click)="confirmHardDeleteCategory()" [disabled]="loading()">
+        {{ loading() ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Hard Delete Subcategory Modal -->
+<div *ngIf="showHardDeleteSubcategoryModal()" class="modal-overlay" (click)="cancelHardDeleteSubcategory()">
+  <div class="modal-content small-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>
+        <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"/>
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+        Delete Subcategory
+      </h3>
+      <button class="modal-close" (click)="cancelHardDeleteSubcategory()">
+        <span class="close-icon">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete this subcategory?</p>
+      <div class="item-info" *ngIf="selectedSubcategory()">
+        <p><strong>Subcategory:</strong> {{ selectedSubcategory()?.name }}</p>
+      </div>
+      <div class="warning-box">
+        <p>
+          <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <strong>Warning:</strong> This will permanently delete the subcategory and all associated products!
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="cancelHardDeleteSubcategory()" [disabled]="loading()">
+        Cancel
+      </button>
+      <button class="btn-danger" (click)="confirmHardDeleteSubcategory()" [disabled]="loading()">
+        {{ loading() ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Product Modal -->
+<div *ngIf="showDeleteProductModal()" class="modal-overlay" (click)="cancelDeleteProduct()">
+  <div class="modal-content small-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>
+        <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"/>
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+        Delete Product
+      </h3>
+      <button class="modal-close" (click)="cancelDeleteProduct()">
+        <span class="close-icon">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete this product?</p>
+      <div class="item-info" *ngIf="selectedProduct()">
+        <p><strong>Product:</strong> {{ selectedProduct()?.name }}</p>
+        <p><strong>Price:</strong> ₺{{ selectedProduct()?.price }}</p>
+      </div>
+      <div class="warning-box">
+        <p>
+          <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <strong>Warning:</strong> This will permanently delete the product and remove it from all menus!
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="cancelDeleteProduct()" [disabled]="loading()">
+        Cancel
+      </button>
+      <button class="btn-danger" (click)="confirmDeleteProduct()" [disabled]="loading()">
+        {{ loading() ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>

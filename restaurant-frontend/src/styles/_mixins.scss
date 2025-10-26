@@ -1,0 +1,259 @@
+@use 'variables' as *;
+
+// Gradient Mixins
+@mixin primary-gradient {
+  background: linear-gradient(135deg, #6264c4 0%, #5859c7 100%);
+}
+
+// Toggle Button Mixin
+@mixin toggle-btn($size: 36px) {
+  background: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: $size;
+  height: $size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.3rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(184, 169, 201, 0.3);
+
+  &:hover {
+    background: $primary-hover;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(168, 164, 192, 0.4);
+  }
+}
+
+// Button Mixins
+@mixin button-base {
+  border: none;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all $transition-normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  min-height: $btn-touch-min-height;
+  min-width: $btn-touch-min-width;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+@mixin button-variant($bg-color, $hover-color, $text-color: white) {
+  background: $bg-color;
+  color: $text-color;
+  
+  &:hover:not(:disabled) {
+    background: $hover-color;
+  }
+}
+
+@mixin button-size($padding-y, $padding-x, $font-size: 1rem) {
+  padding: $padding-y $padding-x;
+  font-size: $font-size;
+}
+
+// Action-specific button variants
+@mixin button-danger {
+  @include button-variant($danger-color, $danger-hover);
+  border: 2px solid $danger-color;
+  
+  &:hover:not(:disabled) {
+    background: $danger-hover;
+    border-color: $danger-hover;
+  }
+}
+
+@mixin button-warning {
+  @include button-variant($warning-color, $warning-hover, $dark-color);
+  border: 2px solid $warning-color;
+  
+  &:hover:not(:disabled) {
+    background: $warning-hover;
+    border-color: $warning-hover;
+  }
+}
+
+@mixin button-success {
+  @include button-variant($success-color, $success-hover);
+  border: 2px solid $success-color;
+  
+  &:hover:not(:disabled) {
+    background: $success-hover;
+    border-color: $success-hover;
+  }
+}
+
+@mixin button-secondary {
+  @include button-variant($secondary-color, $secondary-hover);
+  border: 2px solid $secondary-color;
+  
+  &:hover:not(:disabled) {
+    background: $secondary-hover;
+    border-color: $secondary-hover;
+  }
+}
+
+// Card Mixins
+@mixin card-base {
+  background: white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  border: 1px solid $border-color;
+  transition: all $transition-normal;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+// Form Mixins
+@mixin form-input {
+  padding: $spacing-md;
+  border: 2px solid $border-color;
+  border-radius: $border-radius-lg;
+  font-size: 1rem;
+  transition: border-color $transition-fast;
+  min-height: $btn-touch-min-height;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+  
+  &.ng-invalid.ng-touched {
+    border-color: $danger-color;
+  }
+}
+
+// Grid Mixins
+@mixin responsive-grid($min-width: 280px) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-width, 1fr));
+  gap: $spacing-lg;
+}
+
+// Container Mixins
+@mixin container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+  
+  @include mobile {
+    padding: 0 $spacing-sm;
+  }
+}
+
+@mixin container-sm {
+  @include container;
+  max-width: $container-sm;
+}
+
+@mixin container-md {
+  @include container;
+  max-width: $container-md;
+}
+
+@mixin container-lg {
+  width: 100%;
+  max-width: $container-lg;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @include mobile {
+    padding: 0 $spacing-sm;
+  }
+}
+
+@mixin container-xl {
+  @include container;
+  max-width: $container-xl;
+}
+
+// Media Query Mixins - Updated with more breakpoints
+@mixin mobile-xs {
+  @media (max-width: $breakpoint-xs) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (max-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin desktop-xl {
+  @media (max-width: $breakpoint-xl) {
+    @content;
+  }
+}
+
+// Responsive text mixins
+@mixin responsive-text($desktop-size, $tablet-size, $mobile-size) {
+  font-size: $desktop-size;
+  
+  @include tablet {
+    font-size: $tablet-size;
+  }
+  
+  @include mobile {
+    font-size: $mobile-size;
+  }
+}
+
+// Responsive spacing mixins
+@mixin responsive-padding($desktop, $tablet, $mobile) {
+  padding: $desktop;
+  
+  @include tablet {
+    padding: $tablet;
+  }
+  
+  @include mobile {
+    padding: $mobile;
+  }
+}
+
+// Table responsive mixins
+@mixin table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  table {
+    min-width: 600px;
+    
+    @include mobile {
+      min-width: 400px;
+    }
+  }
+}

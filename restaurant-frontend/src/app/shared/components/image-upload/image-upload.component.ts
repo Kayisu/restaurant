@@ -55,8 +55,11 @@ export interface ImageUploadConfig {
         <div class="image-container">
           <!-- Default Placeholder -->
           <div *ngIf="!imageUrl()" class="default-placeholder">
-            <!-- Clean placeholder without icon -->
+            <img *ngIf="defaultImageUrl" [src]="defaultImageUrl" alt="Default" class="default-image">
           </div>
+          
+          <!-- Uploaded Image -->
+          <img *ngIf="imageUrl()" [src]="imageUrl()" alt="Uploaded Image" class="uploaded-image">
         </div>
 
         <!-- Upload Content -->
@@ -69,7 +72,7 @@ export interface ImageUploadConfig {
             </svg>
           </div>
           <p class="upload-text">Select or drag & drop the image</p>
-          <p class="upload-hint">PNG, JPG, WEBP up to 5MB</p>
+          <p class="upload-hint">PNG, JPG, WEBP up to 10MB</p>
           
           <!-- Progress Bar -->
           <div *ngIf="uploading()" class="progress-container">
@@ -174,7 +177,7 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
     this.dragConfig = {
       accept: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
       maxFiles: this.config.multiple ? (this.config.maxFiles || 5) : 1,
-      maxSize: 5 * 1024 * 1024, // 5MB
+      maxSize: 10 * 1024 * 1024, // 10MB
       disabled: false
     };
   }

@@ -85,7 +85,7 @@ export class ImageService {
 
   // Validate image file
   validateImage(file: File): { valid: boolean; error?: string } {
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
     if (!allowedTypes.includes(file.type)) {
@@ -93,7 +93,7 @@ export class ImageService {
     }
 
     if (file.size > maxSize) {
-      return { valid: false, error: 'Image size must be less than 5MB' };
+      return { valid: false, error: 'Image size must be less than 10MB' };
     }
 
     return { valid: true };

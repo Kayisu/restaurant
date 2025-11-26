@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CatalogService } from '../../../core/services/catalog.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { RestaurantApiService } from '../../../core/services/restaurant-api.service';
+import { ImageService } from '../../../core/services/image.service';
 import { Product, CreateOrderRequest, ApiResponse, Order } from '../../../shared/interfaces';
 import { firstValueFrom } from 'rxjs';
 
@@ -52,9 +53,12 @@ import { firstValueFrom } from 'rxjs';
               alt="{{ product()?.name }}"
               class="product-image"
             />
-            <div *ngIf="!getProductImage()" class="no-image">
-              <p>No image available</p>
-            </div>
+            <img 
+              *ngIf="!getProductImage()" 
+              [src]="defaultImageUrl" 
+              alt="Default Product Image"
+              class="product-image default-image"
+            />
           </div>
 
           <div class="product-info">
@@ -125,6 +129,7 @@ export class ProductDetailComponent implements OnInit {
   product = signal<Product | null>(null);
   loading = signal(false);
   error = signal<string | null>(null);
+  defaultImageUrl = '';
 
   // Make Math available in template
   Math = Math;
@@ -135,8 +140,11 @@ export class ProductDetailComponent implements OnInit {
     private router: Router,
     private catalogService: CatalogService,
     private toastService: ToastService,
-    private restaurantApi: RestaurantApiService
-  ) {}
+    private restaurantApi: RestaurantApiService,
+    private imageService: ImageService
+  ) {
+    this.defaultImageUrl = this.imageService.generateDefaultImage('product', 'detail');
+  }
 
   ngOnInit(): void {
     this.tableId = this.route.snapshot.paramMap.get('tableId') || '';

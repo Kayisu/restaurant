@@ -83,7 +83,7 @@ export class MenuManagementComponent implements OnInit {
     type: 'menu',
     variant: 'card',
     recommendedDimensions: { width: 400, height: 300 },
-    maxFileSize: 5 * 1024 * 1024, // 5MB
+    maxFileSize: 10 * 1024 * 1024, // 10MB
     allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
     showPreview: true,
     showProgress: true
